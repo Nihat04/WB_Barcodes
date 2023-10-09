@@ -9,6 +9,9 @@ namespace WildBerries_Barcodes
     {
         public static void GeneratePdfByExcel(Panel panel)
         {
+            if (!Directory.Exists("temp"))
+                Directory.CreateDirectory("temp");
+
             var temporaryExcelPath = @"temp\temporaryExcel.xlsx";
 
             using (OpenFileDialog dialog = new OpenFileDialog() { Filter = "Excel WorkBook|*.xlsx", ValidateNames = true })
@@ -108,7 +111,7 @@ namespace WildBerries_Barcodes
 
             foreach(var row in rows)
             {
-                if (row.ItemArray[0].ToString().StartsWith("Артикуль"))
+                if (row.ItemArray[0].ToString().StartsWith("Артикуль") || Equals(row.ItemArray[0].ToString(), ""))
                     continue;
 
                 var jsonText = RestAPI.PostRequest(row.ItemArray[1].ToString());
