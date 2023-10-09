@@ -10,6 +10,9 @@ namespace WildBerries_Barcodes
         }
         private void FormLoad(object sender, EventArgs e)
         {
+            if (!File.Exists("info.json"))
+                File.Create("info.json");
+
             using(var jsonFile = File.OpenRead("info.json"))
             {
                 var jsonText = JsonSerializer.Deserialize<Info>(jsonFile);

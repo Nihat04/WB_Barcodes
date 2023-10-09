@@ -93,7 +93,11 @@ namespace WildBerries_Barcodes
         private void UpdateInfo(Label about, Label brand)
         {
             if (!File.Exists("info.json"))
-                return;
+            {
+                var info = new Info() { About = About.Text, Brand = Brand.Text };
+                var jsonText = JsonSerializer.Serialize(info);
+                File.WriteAllText("info.json", jsonText);
+            }
 
             using (var jsonFile = File.OpenRead("info.json"))
             {
