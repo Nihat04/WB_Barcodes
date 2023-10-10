@@ -61,36 +61,36 @@ namespace WildBerries_Barcodes
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void TokenButton_Click(object sender, EventArgs e)
         {
             Form form = new Form2();
             DialogResult dialogResult = form.ShowDialog();
             if(dialogResult == DialogResult.OK) 
             {
                 var controls = form.Controls;
-                var textBox = controls.Find("textBox1", true)[0].Text;
+                var textBox = controls.Find("TokenBox", true)[0].Text;
                 RestAPI.Token = textBox;
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void InformationButton_Click(object sender, EventArgs e)
         {
             Form form = new Form3();
             DialogResult dialogResult = form.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
-                UpdateInfo(About, Brand);
+                UpdateImageInfo(About, Brand);
             }
         }
 
         private void FormLoad(object sender, EventArgs e)
         {
-            UpdateInfo(About, Brand);
+            UpdateImageInfo(About, Brand);
             Logic.BarcodeImage("1", BarcodeIMG);
             //TagSize.Change(ImagePanel);
         }
 
-        private void UpdateInfo(Label about, Label brand)
+        private void UpdateImageInfo(Label about, Label brand)
         {
             if (!File.Exists("info.json"))
             {

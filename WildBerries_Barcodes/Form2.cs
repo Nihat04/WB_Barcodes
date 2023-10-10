@@ -15,5 +15,10 @@ namespace WildBerries_Barcodes
 
             Process.Start(sInfo);
         }
+
+        private void OnLoad(object sender, EventArgs e)
+        {
+            TokenBox.Text = RestAPI.Token;
+        }
     }
 }

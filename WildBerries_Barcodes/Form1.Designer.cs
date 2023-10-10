@@ -44,12 +44,12 @@
             this.FolderButton = new System.Windows.Forms.Button();
             this.ExcelButton = new System.Windows.Forms.Button();
             this.TicketSizeContainer = new System.Windows.Forms.FlowLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.SizeButton = new System.Windows.Forms.Button();
             this.Size58x40 = new System.Windows.Forms.Button();
             this.Size58x30 = new System.Windows.Forms.Button();
             this.DropDownTimer = new System.Windows.Forms.Timer(this.components);
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.TokenButton = new System.Windows.Forms.Button();
+            this.InformationButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.BarcodeIMG)).BeginInit();
             this.ImagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EAC)).BeginInit();
@@ -214,7 +214,7 @@
             // 
             // TicketSizeContainer
             // 
-            this.TicketSizeContainer.Controls.Add(this.button1);
+            this.TicketSizeContainer.Controls.Add(this.SizeButton);
             this.TicketSizeContainer.Controls.Add(this.Size58x40);
             this.TicketSizeContainer.Controls.Add(this.Size58x30);
             this.TicketSizeContainer.Location = new System.Drawing.Point(9, 69);
@@ -225,18 +225,18 @@
             this.TicketSizeContainer.Size = new System.Drawing.Size(100, 40);
             this.TicketSizeContainer.TabIndex = 16;
             // 
-            // button1
+            // SizeButton
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.Control;
-            this.button1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button1.Location = new System.Drawing.Point(0, 0);
-            this.button1.Margin = new System.Windows.Forms.Padding(0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 40);
-            this.button1.TabIndex = 17;
-            this.button1.Text = "Размеры";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.SizeButton.BackColor = System.Drawing.SystemColors.Control;
+            this.SizeButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.SizeButton.Location = new System.Drawing.Point(0, 0);
+            this.SizeButton.Margin = new System.Windows.Forms.Padding(0);
+            this.SizeButton.Name = "SizeButton";
+            this.SizeButton.Size = new System.Drawing.Size(100, 40);
+            this.SizeButton.TabIndex = 17;
+            this.SizeButton.Text = "Размеры";
+            this.SizeButton.UseVisualStyleBackColor = false;
+            this.SizeButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // Size58x40
             // 
@@ -273,33 +273,33 @@
             this.DropDownTimer.Interval = 1;
             this.DropDownTimer.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // button2
+            // TokenButton
             // 
-            this.button2.Location = new System.Drawing.Point(134, 69);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 40);
-            this.button2.TabIndex = 17;
-            this.button2.Text = "Токен";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.TokenButton.Location = new System.Drawing.Point(134, 69);
+            this.TokenButton.Name = "TokenButton";
+            this.TokenButton.Size = new System.Drawing.Size(100, 40);
+            this.TokenButton.TabIndex = 17;
+            this.TokenButton.Text = "Токен";
+            this.TokenButton.UseVisualStyleBackColor = true;
+            this.TokenButton.Click += new System.EventHandler(this.TokenButton_Click);
             // 
-            // button3
+            // InformationButton
             // 
-            this.button3.Location = new System.Drawing.Point(134, 121);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(100, 40);
-            this.button3.TabIndex = 18;
-            this.button3.Text = "Инфо";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.InformationButton.Location = new System.Drawing.Point(134, 121);
+            this.InformationButton.Name = "InformationButton";
+            this.InformationButton.Size = new System.Drawing.Size(100, 40);
+            this.InformationButton.TabIndex = 18;
+            this.InformationButton.Text = "Инфо";
+            this.InformationButton.UseVisualStyleBackColor = true;
+            this.InformationButton.Click += new System.EventHandler(this.InformationButton_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(734, 361);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.InformationButton);
+            this.Controls.Add(this.TokenButton);
             this.Controls.Add(this.TicketSizeContainer);
             this.Controls.Add(this.ExcelButton);
             this.Controls.Add(this.FolderButton);
@@ -333,11 +333,11 @@
         private Label Country;
         private Button ExcelButton;
         private FlowLayoutPanel TicketSizeContainer;
-        private Button button1;
+        private Button SizeButton;
         private Button Size58x40;
         private Button Size58x30;
         private System.Windows.Forms.Timer DropDownTimer;
-        private Button button2;
-        private Button button3;
+        private Button TokenButton;
+        private Button InformationButton;
     }
 }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.buttonOK = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.TokenBox = new System.Windows.Forms.TextBox();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
@@ -44,12 +44,12 @@
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // TokenBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(4, 14);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(242, 23);
-            this.textBox1.TabIndex = 1;
+            this.TokenBox.Location = new System.Drawing.Point(4, 14);
+            this.TokenBox.Name = "TokenBox";
+            this.TokenBox.Size = new System.Drawing.Size(242, 23);
+            this.TokenBox.TabIndex = 1;
             // 
             // buttonCancel
             // 
@@ -81,12 +81,13 @@
             this.ClientSize = new System.Drawing.Size(250, 100);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.buttonCancel);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.TokenBox);
             this.Controls.Add(this.buttonOK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "token";
+            this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -95,7 +96,7 @@
         #endregion
 
         private Button buttonOK;
-        private TextBox textBox1;
+        private TextBox TokenBox;
         private Button buttonCancel;
         private LinkLabel linkLabel1;
     }
