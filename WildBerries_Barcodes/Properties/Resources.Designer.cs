@@ -59,15 +59,5 @@ namespace WildBerries_Barcodes.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap EAC {
-            get {
-                object obj = ResourceManager.GetObject("EAC", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }
