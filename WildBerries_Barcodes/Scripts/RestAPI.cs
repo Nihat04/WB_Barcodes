@@ -1,13 +1,14 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 
-namespace WildBerries_Barcodes
+namespace WildBerries_Barcodes.Scripts
 {
-    public class RestAPI
+    public static class RestAPI
     {
         public static string Token
         {
-            get {
+            get
+            {
                 if (!File.Exists("token.txt"))
                     File.Create("token.txt");
 
@@ -30,7 +31,7 @@ namespace WildBerries_Barcodes
 
             var response = client.PostAsync("/content/v1/cards/filter", content).Result;
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var responseContent = response.Content.ReadAsStringAsync().Result;
                 return responseContent;

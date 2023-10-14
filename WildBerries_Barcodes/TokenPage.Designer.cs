@@ -1,6 +1,6 @@
 ﻿namespace WildBerries_Barcodes
 {
-    partial class Form2
+    partial class TokenPage
     {
         /// <summary>
         /// Required designer variable.

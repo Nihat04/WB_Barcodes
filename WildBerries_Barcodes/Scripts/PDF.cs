@@ -2,9 +2,9 @@
 using PdfSharp.Pdf;
 using System.Diagnostics;
 
-namespace WildBerries_Barcodes
+namespace WildBerries_Barcodes.Scripts
 {
-    internal class PDF
+    internal static class PDF
     {
 
         private static PdfDocument PDFile = new PdfDocument();
@@ -73,7 +73,7 @@ namespace WildBerries_Barcodes
             Process.Start(new ProcessStartInfo()
             {
                 FileName = filePath,
-                UseShellExecute= true,
+                UseShellExecute = true,
             });
         }
 

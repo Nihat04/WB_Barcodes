@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
+using WildBerries_Barcodes.Scripts;
 
 namespace WildBerries_Barcodes
 {
-    public partial class Form2 : Form
+    public partial class TokenPage : Form
     {
-        public Form2()
+        public TokenPage()
         {
             InitializeComponent();
         }

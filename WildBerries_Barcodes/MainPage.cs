@@ -1,16 +1,18 @@
 using System.Diagnostics;
 using System.Text.Json;
+using WildBerries_Barcodes.Scripts;
+using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes
 {
-    public partial class Form1 : Form
+    public partial class MainPage : Form
     {
-        public Form1()
+        public MainPage()
         {
             InitializeComponent();
         }
 
-        bool expand = false;
+        private bool Expand = false;
 
         private void FolderOpenButton_Click(object sender, EventArgs e)
         {
@@ -22,7 +24,7 @@ namespace WildBerries_Barcodes
             Logic.GeneratePdfByExcel(ImagePanel);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             DropDownTimer.Start();
         }
@@ -39,15 +41,15 @@ namespace WildBerries_Barcodes
             TagSize.Change(ImagePanel);
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
-            if (expand)
+            if (Expand)
             {
                 TicketSizeContainer.Height -= 10;
                 if(TicketSizeContainer.Height <= TicketSizeContainer.MinimumSize.Height)
                 {
                     DropDownTimer.Stop();
-                    expand = false;
+                    Expand = false;
                 }
             }
             else
@@ -56,14 +58,14 @@ namespace WildBerries_Barcodes
                 if(TicketSizeContainer.Height >= TicketSizeContainer.MaximumSize.Height)
                 {
                     DropDownTimer.Stop();
-                    expand = true;
+                    Expand = true;
                 }
             }
         }
 
         private void TokenButton_Click(object sender, EventArgs e)
         {
-            Form form = new Form2();
+            Form form = new TokenPage();
             DialogResult dialogResult = form.ShowDialog();
             if(dialogResult == DialogResult.OK) 
             {
@@ -75,7 +77,7 @@ namespace WildBerries_Barcodes
 
         private void InformationButton_Click(object sender, EventArgs e)
         {
-            Form form = new Form3();
+            Form form = new InformationPage();
             DialogResult dialogResult = form.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
@@ -87,7 +89,7 @@ namespace WildBerries_Barcodes
         {
             UpdateImageInfo(About, Brand);
             Logic.BarcodeImage("1", BarcodeIMG);
-            //TagSize.Change(ImagePanel);
+            TagSize.Change(ImagePanel);
         }
 
         private void UpdateImageInfo(Label about, Label brand)

@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 
-namespace WildBerries_Barcodes
+namespace WildBerries_Barcodes.Scripts
 {
-    public class TagSize
+    public static class TagSize
     {
         public static void Change(Panel panel)
         {
@@ -12,10 +12,10 @@ namespace WildBerries_Barcodes
             controls["Brand"].Location = new Point(2, 2);
             controls["Type"].Location = new Point(panel.Width / 2 - controls["Type"].Width / 2, 2);
 
-            controls["BarcodeIMG"].Size = new System.Drawing.Size(panel.Width-10, panel.Height/4);
+            controls["BarcodeIMG"].Size = new System.Drawing.Size(panel.Width - 10, panel.Height / 4);
             controls["BarcodeIMG"].Location = new Point(
-                panel.Width / 2 - controls["BarcodeIMG"].Width/2,
-                controls["Type"].Location.Y + controls["Type"].Height +15
+                panel.Width / 2 - controls["BarcodeIMG"].Width / 2,
+                controls["Type"].Location.Y + controls["Type"].Height + 15
                 );
 
             controls["BarcodeDigits"].Location = new Point(
@@ -31,9 +31,9 @@ namespace WildBerries_Barcodes
             var freeSpace = controls["About"].Location.Y - controls["BarcodeDigits"].Location.Y + controls["BarcodeDigits"].Height;
             var compensation = controls["BarcodeDigits"].Location.Y + controls["BarcodeDigits"].Height;
 
-            controls["Articul"].Location = new Point(2,compensation + Convert.ToInt32(freeSpace * (2.0 / 4)) - controls["About"].Height);
-            controls["Size"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (1.0 / 4)) - controls["Size"].Height);
-            controls["Color"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (3.0 / 4)) - Convert.ToInt32(controls["Size"].Height*1.2));
+            controls["Size"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (1.0 / 4)) - controls["Size"].Height - 5);
+            controls["Articul"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (2.0 / 4)) - controls["About"].Height);
+            controls["Color"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (3.0 / 4)) - Convert.ToInt32(controls["Size"].Height * 1.2));
         }
 
         private static Dictionary<string, Control> GetControls(Panel panel)

@@ -1,10 +1,11 @@
 ﻿using System.Text.Json;
+using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes
 {
-    public partial class Form3 : Form
+    public partial class InformationPage : Form
     {
-        public Form3()
+        public InformationPage()
         {
             InitializeComponent();
         }
@@ -20,7 +21,7 @@ namespace WildBerries_Barcodes
                 Brand.Text = jsonText.Brand;
             }
         }
-        private void buttonOK_Click(object sender, EventArgs e)
+        private void ButtonOK_Click(object sender, EventArgs e)
         {
             var data = new Info()
             {

@@ -2,10 +2,11 @@
 using System.Data;
 using System.Text;
 using System.Text.Json;
+using WildBerries_Barcodes.Scripts.JsonClasses;
 
-namespace WildBerries_Barcodes
+namespace WildBerries_Barcodes.Scripts
 {
-    public class Logic
+    public static class Logic
     {
         public static void GeneratePdfByExcel(Panel panel)
         {
@@ -21,7 +22,7 @@ namespace WildBerries_Barcodes
 
                 var enc = CodePagesEncodingProvider.Instance.GetEncoding(1252);
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                
+
                 File.Copy(dialog.FileName, temporaryExcelPath, true);
             }
 
@@ -45,13 +46,13 @@ namespace WildBerries_Barcodes
         {
             var controls = panel.Controls;
 
-            foreach(var row in excelData)
+            foreach (var row in excelData)
             {
-                foreach(Control control in controls)
+                foreach (Control control in controls)
                 {
                     var type = control.GetType().Name;
 
-                    switch(type)
+                    switch (type)
                     {
                         case "Label":
                             var controlAsLabel = control as Label;
@@ -59,7 +60,7 @@ namespace WildBerries_Barcodes
                             if (!row.ContainsKey(controlAsLabel.Name))
                                 continue;
 
-                            if(controlAsLabel.Text.Contains(':'))
+                            if (controlAsLabel.Text.Contains(':'))
                                 controlAsLabel.Text = $"{controlAsLabel.Text.Split(':')[0]}: {row[controlAsLabel.Name]}";
                             else
                                 controlAsLabel.Text = row[controlAsLabel.Name].ToString();
@@ -76,7 +77,8 @@ namespace WildBerries_Barcodes
                     }
                 }
 
-                PDF.CreatePage(panel, int.Parse(row["count"].ToString())*2);
+                PDF.CreatePage(panel, int.Parse(row["count"].ToString()) * 2);
+                Excel.AddColumn(row["BarcodeDigits"].ToString(), int.Parse(row["count"].ToString()));
             }
         }
 
@@ -86,14 +88,14 @@ namespace WildBerries_Barcodes
             var allData = new List<Dictionary<string, object>>();
             var rowData = new Dictionary<string, object>();
 
-            for (int i = 1; i < rows.Length; i++) 
+            for (int i = 1; i < rows.Length; i++)
             {
                 var row = rows[i];
 
-                if (row.ItemArray[0].ToString() == string.Empty) 
+                if (row.ItemArray[0].ToString() == string.Empty)
                     continue;
 
-                for(int j = 0; j < row.ItemArray.Length; j++)
+                for (int j = 0; j < row.ItemArray.Length; j++)
                 {
                     rowData[titles[j].ToString()] = row.ItemArray[j];
                 }
@@ -109,24 +111,24 @@ namespace WildBerries_Barcodes
         {
             var data = new List<Dictionary<string, object>>();
 
-            foreach(var row in rows)
+            foreach (var row in rows)
             {
                 if (row.ItemArray[0].ToString().StartsWith("Артикуль") || Equals(row.ItemArray[0].ToString(), ""))
                     continue;
 
                 var jsonText = RestAPI.PostRequest(row.ItemArray[1].ToString());
 
-                if(Equals(jsonText, "Error: Unauthorized"))
+                if (Equals(jsonText, "Error: Unauthorized"))
                     return null;
 
                 var jsonAsClass = JsonSerializer.Deserialize<DataWB>(jsonText);
 
                 var itemData = jsonAsClass.data[0];
-                if(jsonAsClass.data.Count > 1)
+                if (jsonAsClass.data.Count > 1)
                 {
-                    foreach(var articul in jsonAsClass.data)
+                    foreach (var articul in jsonAsClass.data)
                     {
-                        if(articul.vendorCode == row.ItemArray[1].ToString())
+                        if (articul.vendorCode == row.ItemArray[1].ToString())
                         {
                             itemData = articul;
                             break;
@@ -151,7 +153,7 @@ namespace WildBerries_Barcodes
 
         private static object GetCountry(List<Characteristic> characteristics)
         {
-            foreach(Characteristic characteristic in characteristics)
+            foreach (Characteristic characteristic in characteristics)
             {
                 if (!Equals(characteristic.Country, null))
                     return characteristic.Country[0];
@@ -178,14 +180,14 @@ namespace WildBerries_Barcodes
             {
 
             });
-            
+
         }
 
-        private static string GetBarcode(object requiredSize, List<Size> sizes)
+        private static string GetBarcode(object requiredSize, List<WildBerries_Barcodes.Scripts.JsonClasses.Size> sizes)
         {
-            foreach(var size in sizes)
+            foreach (var size in sizes)
             {
-                if(Equals(requiredSize.ToString(), size.techSize.ToString()))
+                if (Equals(requiredSize.ToString(), size.techSize.ToString()))
                     return size.skus[0].ToString();
             }
             return "unknown size";

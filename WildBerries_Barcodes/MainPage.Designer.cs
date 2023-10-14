@@ -1,6 +1,6 @@
 ﻿namespace WildBerries_Barcodes
 {
-    partial class Form1
+    partial class MainPage
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainPage));
             this.BarcodeIMG = new System.Windows.Forms.PictureBox();
             this.ImagePanel = new System.Windows.Forms.Panel();
             this.Country = new System.Windows.Forms.Label();
@@ -236,7 +236,7 @@
             this.SizeButton.TabIndex = 17;
             this.SizeButton.Text = "Размеры";
             this.SizeButton.UseVisualStyleBackColor = false;
-            this.SizeButton.Click += new System.EventHandler(this.button1_Click);
+            this.SizeButton.Click += new System.EventHandler(this.Button1_Click);
             // 
             // Size58x40
             // 
@@ -271,7 +271,7 @@
             // DropDownTimer
             // 
             this.DropDownTimer.Interval = 1;
-            this.DropDownTimer.Tick += new System.EventHandler(this.timer1_Tick);
+            this.DropDownTimer.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // TokenButton
             // 
