@@ -77,6 +77,7 @@ namespace WildBerries_Barcodes
                 }
 
                 PDF.CreatePage(panel, int.Parse(row["count"].ToString())*2);
+                Excel.AddColumn(row["BarcodeDigits"].ToString(), int.Parse(row["count"].ToString()));
             }
         }
 
