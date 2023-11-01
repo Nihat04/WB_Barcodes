@@ -37,7 +37,7 @@ namespace WildBerries_Barcodes.Scripts
                 return responseContent;
             }
             else
-                return $"Error: {response.StatusCode}";
+                return response.StatusCode.ToString();
         }
     }
 }

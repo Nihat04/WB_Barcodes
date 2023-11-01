@@ -7,6 +7,7 @@ namespace WildBerries_Barcodes.Scripts
         public static void Change(Panel panel)
         {
             var controls = GetControls(panel);
+        
             controls["About"].Location = new Point(2, panel.Height - controls["About"].Height - 2);
             controls["Country"].Location = new Point(panel.Width - controls["Country"].Width - 2, panel.Height - controls["Country"].Height - 2);
             controls["Brand"].Location = new Point(2, 2);

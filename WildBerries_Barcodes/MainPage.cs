@@ -21,7 +21,15 @@ namespace WildBerries_Barcodes
 
         private void ImportExcelButton_Click(object sender, EventArgs e)
         {
-            Logic.GeneratePdfByExcel(ImagePanel);
+            var path = Excel.ChooseFile();
+            var excelRows = Excel.ReadFile(path);
+            var filteredExcel = Excel.Format(excelRows);
+
+            if (filteredExcel == null) return;
+
+            Logic.ApplyData(ImagePanel, filteredExcel);
+            PDF.Save();
+            File.Delete(path);
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -81,18 +89,18 @@ namespace WildBerries_Barcodes
             DialogResult dialogResult = form.ShowDialog();
             if (dialogResult == DialogResult.OK)
             {
-                UpdateImageInfo(About, Brand);
+                UpdateImageInfo();
             }
         }
 
         private void FormLoad(object sender, EventArgs e)
         {
-            UpdateImageInfo(About, Brand);
+            UpdateImageInfo();
             Logic.BarcodeImage("1", BarcodeIMG);
             TagSize.Change(ImagePanel);
         }
 
-        private void UpdateImageInfo(Label about, Label brand)
+        private void UpdateImageInfo()
         {
             if (!File.Exists("info.json"))
             {
