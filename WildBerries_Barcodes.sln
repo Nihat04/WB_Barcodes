@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WildBerries_Barcodes", "WildBerries_Barcodes\WildBerries_Barcodes.csproj", "{8AB36E03-94E5-4B46-86DA-5CF1CDAA816B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WBBarcodes", "WildBerries_Barcodes\WBBarcodes.csproj", "{8AB36E03-94E5-4B46-86DA-5CF1CDAA816B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

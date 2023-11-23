@@ -2,9 +2,9 @@
 using PdfSharp.Pdf;
 using System.Diagnostics;
 
-namespace WildBerries_Barcodes
+namespace WildBerries_Barcodes.Scripts
 {
-    internal class PDF
+    internal static class PDF
     {
 
         private static PdfDocument PDFile = new PdfDocument();
@@ -19,29 +19,7 @@ namespace WildBerries_Barcodes
         /// </summary>
         /// <param name="panel">изображение</param>
         /// <param name="quantity">Количество повторений страниц, по умолчанию 1</param>
-        public static void CreatePage(Bitmap bitmapImage, int quantity = 1)
-        {
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            var memStream = new MemoryStream();
-            bitmapImage.Save(memStream, System.Drawing.Imaging.ImageFormat.Png);
-
-            for (int i = 0; i < quantity; i++)
-            {
-                var page = PDFile.AddPage();
-                page.Width = bitmapImage.Width;
-                page.Height = bitmapImage.Height;
-
-                XGraphics gfx = XGraphics.FromPdfPage(page);
-                gfx.DrawImage(XImage.FromStream(memStream), 0, 0, page.Width, page.Height);
-            }
-        }
-
-        /// <summary>
-        /// Добавляет страницу в PDF файл, без сохранения
-        /// </summary>
-        /// <param name="panel">изображение</param>
-        /// <param name="quantity">Количество повторений страниц, по умолчанию 1</param>
-        public static void CreatePage(Panel panel, int quantity = 1)
+        public static void AddPage(Panel panel, int quantity = 1)
         {
             var image = GetPanelAsImage(panel);
 
@@ -62,7 +40,14 @@ namespace WildBerries_Barcodes
 
         public static void Save()
         {
-            var fileName = DateTime.Now.ToString("dd.MM.yyyy") + ".pdf";
+            if (PDFile.PageCount == 0)
+            {
+                MessageBox.Show("Нельзя сохранить файл с отсутствующими страницами", "Ошибка сохранения PDF", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var fileName = DateTime.Now.ToString("dd.MM.yyyy_t") + ".pdf";
 
             if (!Directory.Exists(@"PDF's folder"))
                 Directory.CreateDirectory("PDF's folder");
@@ -73,7 +58,7 @@ namespace WildBerries_Barcodes
             Process.Start(new ProcessStartInfo()
             {
                 FileName = filePath,
-                UseShellExecute= true,
+                UseShellExecute = true,
             });
         }
 
@@ -83,11 +68,6 @@ namespace WildBerries_Barcodes
             FinalPanel.DrawToBitmap(btm, new Rectangle(0, 0, btm.Width, btm.Height));
 
             return btm;
-        }
-
-        public static void OpenFile(string path)
-        {
-
         }
     }
 }

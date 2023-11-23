@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WildBerries_Barcodes
+namespace WildBerries_Barcodes.Scripts.JsonClasses
 {
     public class Characteristic
     {
