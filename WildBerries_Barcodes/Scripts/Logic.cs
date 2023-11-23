@@ -1,10 +1,4 @@
-﻿using ExcelDataReader;
-using System.Data;
-using System.Net;
-using System.Text;
-using System.Text.Json;
-using System.Windows.Forms;
-using WildBerries_Barcodes.Scripts.JsonClasses;
+﻿using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes.Scripts
 {
@@ -79,7 +73,7 @@ namespace WildBerries_Barcodes.Scripts
                 if (Equals(requiredSize.ToString(), size.techSize.ToString()))
                     return size.skus[0].ToString();
             }
-            return "unknown size";
+            return null;
         }
 
     }
