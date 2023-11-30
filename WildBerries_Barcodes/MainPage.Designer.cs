@@ -50,6 +50,7 @@
             this.DropDownTimer = new System.Windows.Forms.Timer(this.components);
             this.TokenButton = new System.Windows.Forms.Button();
             this.InformationButton = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.BarcodeIMG)).BeginInit();
             this.ImagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EAC)).BeginInit();
@@ -293,11 +294,19 @@
             this.InformationButton.UseVisualStyleBackColor = true;
             this.InformationButton.Click += new System.EventHandler(this.InformationButton_Click);
             // 
-            // Form1
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(9, 214);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(225, 23);
+            this.progressBar1.TabIndex = 19;
+            // 
+            // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(734, 361);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.InformationButton);
             this.Controls.Add(this.TokenButton);
             this.Controls.Add(this.TicketSizeContainer);
@@ -305,7 +314,7 @@
             this.Controls.Add(this.FolderButton);
             this.Controls.Add(this.ImagePanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "Form1";
+            this.Name = "MainPage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Barcodes Generator";
             this.Load += new System.EventHandler(this.FormLoad);
@@ -339,5 +348,6 @@
         private System.Windows.Forms.Timer DropDownTimer;
         private Button TokenButton;
         private Button InformationButton;
+        private ProgressBar progressBar1;
     }
 }

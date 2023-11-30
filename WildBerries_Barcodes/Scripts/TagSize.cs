@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes.Scripts
 {
@@ -59,6 +60,47 @@ namespace WildBerries_Barcodes.Scripts
             }
 
             return dictionary;
+        }
+
+        public static void ApplyToPanel(Panel panel, Tag row)
+        {
+            Func<string, string, string> formatFunc = (constText, replaceText) => 
+                constText.Contains(':') ? $"{constText.Split(':')[0]}: {replaceText}": replaceText;
+
+            var controls = panel.Controls;
+            foreach (Control control in controls)
+            {
+                switch(control.Name)
+                {
+                    case "BarcodeDigits":
+                        control.Text = formatFunc(control.Text, row.Data[0].Sizes[0].Barcode[0]);
+                        break;
+
+                    case "BarcodeIMG":
+                        Logic.BarcodeImage(row.Data[0].Sizes[0].Barcode[0], control as PictureBox);
+                        break;
+
+                    case "Size":
+                        control.Text = formatFunc(control.Text, row.Data[0].Sizes[0].SellerSize);
+                        break;
+
+                    case "Articul":
+                        control.Text = formatFunc(control.Text, row.Data[0].WbArticul.ToString());
+                        break;
+
+                    case "Color":
+                        control.Text = formatFunc(control.Text, row.Data[0].Color);
+                        break;
+
+                    case "Country":
+                        control.Text = formatFunc(control.Text, row.Data[0].Characteristics[0].Country[0].ToString());
+                        break;
+
+                    case "Type":
+                        control.Text = formatFunc(control.Text, row.Data[0].Object);
+                        break;
+                }
+            }
         }
     }
 }

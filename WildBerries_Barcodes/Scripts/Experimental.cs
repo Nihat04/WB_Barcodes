@@ -7,72 +7,91 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using WildBerries_Barcodes.Scripts.JsonClasses;
 using WildBerries_Barcodes.Scripts;
+using System.Data;
 
 namespace WBBarcodes.Scripts
 {
-    internal class Experimental
+    public class Experimental
     {
-        public static Task<String> AsyncPostRequest(string articul)
+        public static Task<Tag> AsyncPostRequest(Panel panel, DataRow row)
         {
-            var task = new Task<string>(() =>
-            {
-                return RestAPI.PostRequest(articul);
-            });
-            task.Start();
-            return task;
+            //var task = new Task<Tag>(() =>
+            //{
+            //    return null;
+            //});
+            //task.Start();
+            //return task;
         }
 
-        async public static void AsyncFormat(Panel panel)
+        async public static void DoEverything(Panel panel, string path)
         {
-            var data = new List<Dictionary<string, object>>();
+            //var excelRows = Excel.ReadFile(path);
 
-            for (int i = 172; i < 182; i++)
-            {
-                var jsonText = await AsyncPostRequest(i.ToString());
+            //foreach (var row in excelRows)
+            //{
+            //    var newData = await AsyncPostRequest(panel, row);
+            //    if (newData == null) continue;
 
-                if (jsonText == HttpStatusCode.Unauthorized.ToString())
-                {
-                    MessageBox.Show("Не удалось подключится к пользоателю WB. Проверьте токен подключения", "Ошибка подключения",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+            //    var controls = panel.Controls;
 
-                var jsonAsClass = JsonSerializer.Deserialize<DataWB>(jsonText);
+            //    foreach (Control control in controls)
+            //    {
+            //        var type = control.GetType().Name;
 
-                if (jsonAsClass.data.Count == 0)
-                {
-                    MessageBox.Show($"Не удалось найти товар с артикулем \"{i}\"", "Ошибка поиска",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+            //        switch (type)
+            //        {
+            //            case "Label":
+            //                var controlAsLabel = control as Label;
 
-                var itemData = jsonAsClass.data[0];
-                if (jsonAsClass.data.Count > 1)
-                {
-                    foreach (var articul in jsonAsClass.data)
-                    {
-                        if (articul.vendorCode == i.ToString())
-                        {
-                            itemData = articul;
-                            break;
-                        }
-                    }
-                }
+            //                if (!newData.ContainsKey(controlAsLabel.Name))
+            //                    continue;
 
-                var newData = new Dictionary<string, object>() {
-                    {"BarcodeDigits", Logic.GetBarcode("30", itemData.sizes) },
-                    {"count", "1" },
-                    {"Articul", itemData.nmID },
-                    {"Color", "30" },
-                    {"Size", "30" },
-                    {"Type", itemData.@object },
-                    {"Country", Logic.GetCountry(itemData.characteristics) }
-                };
-                data.Add(newData);
-            }
+            //                if (controlAsLabel.Text.Contains(':'))
+            //                    controlAsLabel.Text = $"{controlAsLabel.Text.Split(':')[0]}: {newData[controlAsLabel.Name]}";
+            //                else
+            //                    controlAsLabel.Text = newData[controlAsLabel.Name].ToString();
+            //                break;
 
-            Logic.ApplyData(panel, data);
-            PDF.Save();
+            //            case "PictureBox":
+            //                var controlAsPictureBox = control as PictureBox;
+
+            //                if (controlAsPictureBox.Name.ToLower() != "barcodeimg")
+            //                    break;
+
+            //                Logic.BarcodeImage(newData["BarcodeDigits"].ToString(), controlAsPictureBox);
+            //                break;
+            //        }
+            //    }
+
+            //    PDF.AddPage(panel, int.Parse(newData["count"].ToString()) * 2);
+            //}
+        }
+
+        public static void testc(Panel imgPanel)
+        {
+            //var panel imgPanel
+
+            //var path = Excel.ChooseFile();
+            //var excelRows = Excel.ReadFile(path);
+
+            //foreach (var row in excelRows)
+            //{
+            //    var formatedRow = Excel.FormatRow(row);
+            //    if (formatedRow == null) continue;
+
+            //    if (formatedRow.Data[0] == null)
+            //    {
+            //        MessageBox.Show("Ошибка с количесвом этикеток", "Неверное значение",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        return;
+            //    }
+
+            //    TagSize.ApplyToPanel(ImagePanel, formatedRow);
+            //    PDF.AddPage(ImagePanel, formatedRow.Data[0].Count);
+            //}
+
+            //PDF.Save();
+            //File.Delete(path);
         }
     }
 }
