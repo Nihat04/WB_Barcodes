@@ -34,7 +34,7 @@ namespace WildBerries_Barcodes.Scripts
             return temporaryExcelPath;
         }
 
-        public static Tag FormatRow(DataRow row)
+        public static Tag GetTagFromRow(DataRow row)
         {
             if (row.ItemArray[0].ToString().StartsWith("Артикуль") || Equals(row.ItemArray[0].ToString(), "")) return null;
 
@@ -59,6 +59,7 @@ namespace WildBerries_Barcodes.Scripts
 
         public static DataRow[] ReadFile(string path)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             FileStream file = File.Open(path, FileMode.Open, FileAccess.Read);
             var reader = ExcelReaderFactory.CreateReader(file);
             var excel = reader.AsDataSet();

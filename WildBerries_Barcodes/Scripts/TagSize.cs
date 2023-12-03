@@ -62,7 +62,7 @@ namespace WildBerries_Barcodes.Scripts
             return dictionary;
         }
 
-        public static void ApplyToPanel(Panel panel, Tag row)
+        public static void RenderPanel(Panel panel, Tag row)
         {
             Func<string, string, string> formatFunc = (constText, replaceText) => 
                 constText.Contains(':') ? $"{constText.Split(':')[0]}: {replaceText}": replaceText;
