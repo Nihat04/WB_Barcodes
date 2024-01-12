@@ -7,11 +7,12 @@ namespace WildBerries_Barcodes.Scripts
     internal static class PDF
     {
 
-        private static PdfDocument PDFile = new PdfDocument();
+        private static PdfDocument PDFile;
 
         public static void CreateNew()
         {
             PDFile = new PdfDocument();
+            PDFile.Info.Title = "created with WbBarcode";
         }
 
         /// <summary>
@@ -38,8 +39,20 @@ namespace WildBerries_Barcodes.Scripts
             }
         }
 
+        public static void AddPage(TagSize tagSize, int quantity)
+        {
+            var page = PDFile.AddPage();
+
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+            XFont font = new XFont(tagSize.FontName, 20, XFontStyle.Regular);
+
+            gfx.DrawString('Hello world', )
+        }
+
         public static void Save()
         {
+            const string folderPath = @"PDF's folder/";
+
             if (PDFile.PageCount == 0)
             {
                 MessageBox.Show("Нельзя сохранить файл с отсутствующими страницами", "Ошибка сохранения PDF", 
@@ -47,10 +60,11 @@ namespace WildBerries_Barcodes.Scripts
                 return;
             }
 
-            var fileName = DateTime.Now.ToString("dd.MM.yyyy_t") + ".pdf";
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
 
-            if (!Directory.Exists(@"PDF's folder"))
-                Directory.CreateDirectory("PDF's folder");
+            var fileName = DateTime.Now.ToString("dd.MM.yyyy") + ".pdf";
+
 
             var filePath = @$"PDF's folder\{fileName}";
             PDFile.Save(filePath);

@@ -22,27 +22,11 @@ namespace WildBerries_Barcodes
 
         private void ImportExcelButton_Click(object sender, EventArgs e)
         {
-            var path = Excel.ChooseFile();
-            var rows = Excel.ReadFile(path);
+            //var path = Excel.ChooseFile();
+            //var rows = Excel.ReadFile(path);
 
-            foreach(var row in rows)
-            {
-                var tag = Excel.GetTagFromRow(row);
-                if (tag == null) continue;
-
-                if(tag.Data[0] == null)
-                {
-                    MessageBox.Show("Ошибка с количесвом этикеток", "Неверное значение",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                Scripts.TagSize.RenderPanel(ImagePanel, tag);
-                PDF.AddPage(ImagePanel, tag.Data[0].Count);
-            }
-
-            PDF.Save();
-            File.Delete(path);
+            //PDF.Save();
+            //File.Delete(path);
         }
 
         private void Button1_Click(object sender, EventArgs e)

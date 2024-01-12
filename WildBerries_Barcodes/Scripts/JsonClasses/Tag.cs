@@ -131,6 +131,8 @@ namespace WildBerries_Barcodes.Scripts.JsonClasses
         [JsonPropertyName("additionalErrors")]
         public object? AdditionalErrors { get; set; }
 
+        public TagSize? Size { get; set; }
+
         public void FilterData(string sellerArticul)
         {
             foreach(var data in this.Data)

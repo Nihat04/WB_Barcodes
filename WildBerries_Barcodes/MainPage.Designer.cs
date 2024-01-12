@@ -190,27 +190,25 @@
             // 
             // FolderButton
             // 
-            this.FolderButton.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.FolderButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.FolderButton.BackColor = System.Drawing.SystemColors.Control;
             this.FolderButton.Location = new System.Drawing.Point(134, 15);
             this.FolderButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.FolderButton.Name = "FolderButton";
             this.FolderButton.Size = new System.Drawing.Size(100, 40);
             this.FolderButton.TabIndex = 14;
             this.FolderButton.Text = "Папка";
-            this.FolderButton.UseVisualStyleBackColor = false;
+            this.FolderButton.UseVisualStyleBackColor = true;
             this.FolderButton.Click += new System.EventHandler(this.FolderOpenButton_Click);
             // 
             // ExcelButton
             // 
-            this.ExcelButton.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ExcelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ExcelButton.BackColor = System.Drawing.SystemColors.Control;
             this.ExcelButton.Location = new System.Drawing.Point(9, 15);
             this.ExcelButton.Name = "ExcelButton";
             this.ExcelButton.Size = new System.Drawing.Size(100, 40);
             this.ExcelButton.TabIndex = 15;
             this.ExcelButton.Text = "Excel";
-            this.ExcelButton.UseVisualStyleBackColor = false;
+            this.ExcelButton.UseVisualStyleBackColor = true;
             this.ExcelButton.Click += new System.EventHandler(this.ImportExcelButton_Click);
             // 
             // TicketSizeContainer
@@ -236,7 +234,7 @@
             this.SizeButton.Size = new System.Drawing.Size(100, 40);
             this.SizeButton.TabIndex = 17;
             this.SizeButton.Text = "Размеры";
-            this.SizeButton.UseVisualStyleBackColor = false;
+            this.SizeButton.UseVisualStyleBackColor = true;
             this.SizeButton.Click += new System.EventHandler(this.Button1_Click);
             // 
             // Size58x40

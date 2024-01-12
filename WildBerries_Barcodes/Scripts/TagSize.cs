@@ -3,8 +3,17 @@ using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes.Scripts
 {
-    public static class TagSize
+    public class TagSize
     {
+        public string FontName { get; set; }
+        public int PageWidth { get; set; }
+        public int PageHeight { get; set; }
+
+        public TagSize(string fontName)
+        {
+            FontName = fontName;
+        }
+
         public static void Change(Panel panel)
         {
             var controls = GetControls(panel);

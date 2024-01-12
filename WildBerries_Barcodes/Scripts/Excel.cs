@@ -18,7 +18,7 @@ namespace WildBerries_Barcodes.Scripts
             if (!Directory.Exists("temp"))
                 Directory.CreateDirectory("temp");
 
-            var temporaryExcelPath = @"temp\temporaryExcel.xlsx";
+            const string temporaryExcelPath = @"temp\temporaryExcel.xlsx";
 
             using (OpenFileDialog dialog = new() { Filter = "Excel WorkBook|*.xlsx", ValidateNames = true })
             {
