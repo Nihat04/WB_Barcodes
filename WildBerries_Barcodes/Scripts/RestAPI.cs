@@ -10,7 +10,10 @@ namespace WildBerries_Barcodes.Scripts
             get
             {
                 if (!File.Exists("token.txt"))
-                    File.Create("token.txt");
+                {
+                    var file = File.Create("token.txt");
+                    file.Close();
+                }
 
                 return File.ReadAllText("token.txt");
             }

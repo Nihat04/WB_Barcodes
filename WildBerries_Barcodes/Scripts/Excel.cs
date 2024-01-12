@@ -53,6 +53,7 @@ namespace WildBerries_Barcodes.Scripts
             jsonAsClass.FilterSize(row.ItemArray[3].ToString());
             jsonAsClass.Data[0].Count = int.Parse(row.ItemArray[4].ToString())*2;
             jsonAsClass.Data[0].Color = row.ItemArray[2].ToString();
+            jsonAsClass.Data[0].CartboxNumber = int.Parse(row.ItemArray[5].ToString());
             return jsonAsClass;
             //Excel.AddColumn(Logic.GetBarcode(row.ItemArray[3], itemData.sizes), int.Parse(row.ItemArray[4].ToString()), int.Parse(row.ItemArray[5].ToString()));
         }

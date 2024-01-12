@@ -115,6 +115,7 @@ namespace WildBerries_Barcodes.Scripts.JsonClasses
 
         public int Count { get; set; }
         public string Color { get; set; }
+        public int CartboxNumber { get; set; }
     }
 
     public class Tag

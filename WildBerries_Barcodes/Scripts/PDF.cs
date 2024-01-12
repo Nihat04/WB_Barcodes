@@ -39,16 +39,6 @@ namespace WildBerries_Barcodes.Scripts
             }
         }
 
-        public static void AddPage(TagSize tagSize, int quantity)
-        {
-            var page = PDFile.AddPage();
-
-            XGraphics gfx = XGraphics.FromPdfPage(page);
-            XFont font = new XFont(tagSize.FontName, 20, XFontStyle.Regular);
-
-            gfx.DrawString('Hello world', )
-        }
-
         public static void Save()
         {
             const string folderPath = @"PDF's folder/";
