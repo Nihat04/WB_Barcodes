@@ -2,9 +2,9 @@
 
 namespace WildBerries_Barcodes.Scripts
 {
-    public static class Logic
+    public static class Barcode
     {
-        public static void BarcodeImage(string barcodeText, PictureBox barcodeBox)
+        public static void GetImage(string barcodeText, PictureBox barcodeBox)
         {
             var barcodeNumbers = "888888888888";
 
@@ -16,6 +16,5 @@ namespace WildBerries_Barcodes.Scripts
 
             barcodeBox.Image = barcode.Encode(BarcodeLib.TYPE.EAN13, barcodeNumbers, Color.Black, Color.Transparent, barcodeBox.Width, barcodeBox.Height);
         }
-
     }
 }

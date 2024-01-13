@@ -86,7 +86,7 @@ namespace WildBerries_Barcodes.Scripts
                         break;
 
                     case "BarcodeIMG":
-                        Logic.BarcodeImage(row.Data[0].Sizes[0].Barcode[0], control as PictureBox);
+                        Barcode.GetImage(row.Data[0].Sizes[0].Barcode[0], control as PictureBox);
                         break;
 
                     case "Size":
@@ -110,6 +110,8 @@ namespace WildBerries_Barcodes.Scripts
                         break;
                 }
             }
+
+            PDF.AddPage(panel, row.Data[0].Count);
         }
     }
 }

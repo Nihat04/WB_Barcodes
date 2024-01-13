@@ -82,6 +82,7 @@
             this.ImagePanel.Controls.Add(this.Size);
             this.ImagePanel.Controls.Add(this.Color);
             this.ImagePanel.Controls.Add(this.Articul);
+            this.ImagePanel.ForeColor = System.Drawing.SystemColors.ControlText;
             this.ImagePanel.Location = new System.Drawing.Point(281, 12);
             this.ImagePanel.MaximumSize = new System.Drawing.Size(435, 300);
             this.ImagePanel.MinimumSize = new System.Drawing.Size(435, 225);
@@ -294,9 +295,9 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(9, 214);
+            this.progressBar1.Location = new System.Drawing.Point(16, 329);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(225, 23);
+            this.progressBar1.Size = new System.Drawing.Size(700, 20);
             this.progressBar1.TabIndex = 19;
             // 
             // MainPage

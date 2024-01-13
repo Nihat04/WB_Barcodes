@@ -1,6 +1,8 @@
+using System.Data;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Windows.Forms;
+using WBBarcodes.Properties;
 using WildBerries_Barcodes.Scripts;
 using WildBerries_Barcodes.Scripts.JsonClasses;
 
@@ -20,31 +22,130 @@ namespace WildBerries_Barcodes
             Process.Start("explorer.exe", $@"PDF's folder");
         }
 
-        private void ImportExcelButton_Click(object sender, EventArgs e)
+        private async void ImportExcelButton_Click(object sender, EventArgs e)
         {
             var path = Excel.ChooseFile();
-            var rows = Excel.ReadFile(path);
 
-            foreach (var row in rows)
-            {
-                var tag = Excel.GetTagFromRow(row);
-                if (tag == null) continue;
-
-                if (tag.Data[0] == null)
-                {
-                    MessageBox.Show("Some Error", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                Scripts.TagSize.RenderPanel(ImagePanel, tag);
-                PDF.AddPage(ImagePanel, tag.Data[0].Count);
-                Excel.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count, tag.Data[0].CartboxNumber);
-            }
+            var tagList = await GenerateTags(path);
 
             PDF.Save();
             File.Delete(path);
         }
+
+        private Task<List<Tag>> GenerateTags(string path)
+        {
+            var task = new Task<List<Tag>>( () =>
+            {
+                PDF.CreateNew();
+                var rows = Excel.ReadFile(path);
+                var tagList = new List<Tag>();
+
+                var panel = ClonePanel(ImagePanel);
+
+                foreach (var row in rows)
+                {
+                    var tag = Excel.GetTagFromRow(row);
+
+                    if (tag == null) continue;
+
+                    if (tag.Data[0] == null)
+                    {
+                        MessageBox.Show("Some Error", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return null;
+                    }
+
+                    tagList.Add(tag);
+                    Scripts.TagSize.RenderPanel(panel, tag);
+                    Excel.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count, tag.Data[0].CartboxNumber);
+                }
+
+                return tagList;
+            });
+
+            task.Start();
+
+            return task;
+        }
+
+        private Panel ClonePanel(Panel panel)
+        {
+            var clonedPanel = new Panel();
+
+            clonedPanel.Size = panel.Size;
+            clonedPanel.BackColor = System.Drawing.Color.White;
+            clonedPanel.BorderStyle = panel.BorderStyle;
+
+            var panelControls = panel.Controls;
+
+            foreach (Control control in panelControls)
+            {
+                if (control.GetType().Name == "Label")
+                {
+                    var controlAsLabel = control as Label;
+                    var clonedControl = new Label();
+
+                    clonedControl.Text = controlAsLabel.Text;
+                    clonedControl.Font = controlAsLabel.Font;
+                    //clonedControl.Size = controlAsLabel.Size;
+                    clonedControl.Name = controlAsLabel.Name;
+                    clonedControl.BackColor = controlAsLabel.BackColor;
+                    clonedControl.TextAlign = controlAsLabel.TextAlign;
+
+                    //clonedControl.UseMnemonic = controlAsLabel.UseMnemonic;
+                    clonedControl.AutoSize = controlAsLabel.AutoSize;
+
+                    clonedPanel.Controls.Add(clonedControl);
+                }
+                else if (control.GetType().Name == "PictureBox")
+                {
+                    var controlAsPictureBox = control as PictureBox;
+                    var clonedControl = new PictureBox();
+
+                    clonedControl.Size = controlAsPictureBox.Size;
+                    clonedControl.Name = controlAsPictureBox.Name;
+                    clonedControl.BackColor = controlAsPictureBox.BackColor;
+                    clonedControl.Location = controlAsPictureBox.Location;
+
+                    if(controlAsPictureBox.Name == "EAC")
+                    {
+                        clonedControl.Image = Resources.EAC;
+                    }
+
+                    clonedPanel.Controls.Add(clonedControl);
+                }
+            }
+
+            TagSize.Change(clonedPanel);
+            return clonedPanel;
+        }
+
+        //private void ImportExcelButton_Click(object sender, EventArgs e)
+        //{
+        //    var path = Excel.ChooseFile();
+        //    var rows = Excel.ReadFile(path);
+        //    PDF.CreateNew();
+
+        //    foreach (var row in rows)
+        //    {
+        //        var tag = Excel.GetTagFromRow(row);
+        //        if (tag == null) continue;
+
+        //        if (tag.Data[0] == null)
+        //        {
+        //            MessageBox.Show("Some Error", "Error",
+        //            MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //            return;
+        //        }
+
+        //        Scripts.TagSize.RenderPanel(ImagePanel, tag);
+        //        PDF.AddPage(ImagePanel, tag.Data[0].Count);
+        //        Excel.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count, tag.Data[0].CartboxNumber);
+        //    }
+
+        //    PDF.Save();
+        //    File.Delete(path);
+        //}
 
         private void Button1_Click(object sender, EventArgs e)
         {
@@ -68,7 +169,7 @@ namespace WildBerries_Barcodes
             if (Expand)
             {
                 TicketSizeContainer.Height -= 10;
-                if(TicketSizeContainer.Height <= TicketSizeContainer.MinimumSize.Height)
+                if (TicketSizeContainer.Height <= TicketSizeContainer.MinimumSize.Height)
                 {
                     DropDownTimer.Stop();
                     Expand = false;
@@ -77,7 +178,7 @@ namespace WildBerries_Barcodes
             else
             {
                 TicketSizeContainer.Height += 10;
-                if(TicketSizeContainer.Height >= TicketSizeContainer.MaximumSize.Height)
+                if (TicketSizeContainer.Height >= TicketSizeContainer.MaximumSize.Height)
                 {
                     DropDownTimer.Stop();
                     Expand = true;
@@ -89,7 +190,7 @@ namespace WildBerries_Barcodes
         {
             Form form = new TokenPage();
             DialogResult dialogResult = form.ShowDialog();
-            if(dialogResult == DialogResult.OK) 
+            if (dialogResult == DialogResult.OK)
             {
                 var controls = form.Controls;
                 var textBox = controls.Find("TokenBox", true)[0].Text;
@@ -110,7 +211,7 @@ namespace WildBerries_Barcodes
         private void FormLoad(object sender, EventArgs e)
         {
             UpdateImageInfo();
-            Logic.BarcodeImage("1", BarcodeIMG);
+            Barcode.GetImage("1", BarcodeIMG);
             Scripts.TagSize.Change(ImagePanel);
         }
 
