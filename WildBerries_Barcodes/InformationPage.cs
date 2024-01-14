@@ -17,8 +17,8 @@ namespace WildBerries_Barcodes
             using(var jsonFile = File.OpenRead("info.json"))
             {
                 var jsonText = JsonSerializer.Deserialize<Info>(jsonFile);
-                About.Text = jsonText.About;
                 Brand.Text = jsonText.Brand;
+                About.Text = jsonText.About;
             }
         }
         private void ButtonOK_Click(object sender, EventArgs e)
@@ -27,6 +27,7 @@ namespace WildBerries_Barcodes
             {
                 Brand = this.Brand.Text,
                 About = this.About.Text,
+                //About = $"Поставщик: {1} г. {2}",
             };
 
             var jsonText = JsonSerializer.Serialize(data);

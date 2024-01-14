@@ -24,26 +24,28 @@ namespace WildBerries_Barcodes
 
         private async void ImportExcelButton_Click(object sender, EventArgs e)
         {
-            var path = Excel.ChooseFile();
+            var filePath = Excel.ChooseFile();
+            var excelRows = Excel.ReadFile(filePath);
 
-            var tagList = await GenerateTags(path);
+            PDF.CreateNew();
 
-            PDF.Save();
-            File.Delete(path);
-        }
-
-        private Task<List<Tag>> GenerateTags(string path)
-        {
-            var task = new Task<List<Tag>>( () =>
+            progressBar1.Value = 0;
+            progressBar1.Maximum = excelRows.Length;
+            var progress = new Progress<int>(value =>
             {
-                PDF.CreateNew();
-                var rows = Excel.ReadFile(path);
-                var tagList = new List<Tag>();
+                progressBar1.Increment(value);
+            });
 
+            await Task.Run( () =>
+            {
                 var panel = ClonePanel(ImagePanel);
 
-                foreach (var row in rows)
+                var progressAsIProgress = progress as IProgress<int>;
+
+                foreach (var row in excelRows)
                 {
+                    progressAsIProgress.Report(1);
+
                     var tag = Excel.GetTagFromRow(row);
 
                     if (tag == null) continue;
@@ -52,20 +54,17 @@ namespace WildBerries_Barcodes
                     {
                         MessageBox.Show("Some Error", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return null;
+                        return;
                     }
 
-                    tagList.Add(tag);
                     Scripts.TagSize.RenderPanel(panel, tag);
                     Excel.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count, tag.Data[0].CartboxNumber);
                 }
 
-                return tagList;
             });
 
-            task.Start();
-
-            return task;
+            PDF.Save();
+            File.Delete(filePath);
         }
 
         private Panel ClonePanel(Panel panel)
