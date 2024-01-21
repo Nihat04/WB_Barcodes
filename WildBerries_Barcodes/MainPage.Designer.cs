@@ -45,8 +45,8 @@
             this.ExcelButton = new System.Windows.Forms.Button();
             this.TicketSizeContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.SizeButton = new System.Windows.Forms.Button();
-            this.Size58x40 = new System.Windows.Forms.Button();
             this.Size58x30 = new System.Windows.Forms.Button();
+            this.Size58x40 = new System.Windows.Forms.Button();
             this.DropDownTimer = new System.Windows.Forms.Timer(this.components);
             this.TokenButton = new System.Windows.Forms.Button();
             this.InformationButton = new System.Windows.Forms.Button();
@@ -83,7 +83,7 @@
             this.ImagePanel.Controls.Add(this.Color);
             this.ImagePanel.Controls.Add(this.Articul);
             this.ImagePanel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.ImagePanel.Location = new System.Drawing.Point(281, 12);
+            this.ImagePanel.Location = new System.Drawing.Point(24, 131);
             this.ImagePanel.MaximumSize = new System.Drawing.Size(435, 300);
             this.ImagePanel.MinimumSize = new System.Drawing.Size(435, 225);
             this.ImagePanel.Name = "ImagePanel";
@@ -115,7 +115,7 @@
             // 
             // EAC
             // 
-            this.EAC.Image = ((System.Drawing.Image)(resources.GetObject("EAC.Image")));
+            this.EAC.Image = global::WBBarcodes.Properties.Resources.EAC;
             this.EAC.Location = new System.Drawing.Point(390, 78);
             this.EAC.Name = "EAC";
             this.EAC.Size = new System.Drawing.Size(35, 35);
@@ -192,37 +192,41 @@
             // FolderButton
             // 
             this.FolderButton.BackColor = System.Drawing.SystemColors.Control;
-            this.FolderButton.Location = new System.Drawing.Point(134, 15);
+            this.FolderButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.FolderButton.Location = new System.Drawing.Point(248, 92);
             this.FolderButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.FolderButton.Name = "FolderButton";
-            this.FolderButton.Size = new System.Drawing.Size(100, 40);
-            this.FolderButton.TabIndex = 14;
+            this.FolderButton.Size = new System.Drawing.Size(175, 30);
+            this.FolderButton.TabIndex = 5;
             this.FolderButton.Text = "Папка";
             this.FolderButton.UseVisualStyleBackColor = true;
             this.FolderButton.Click += new System.EventHandler(this.FolderOpenButton_Click);
             // 
             // ExcelButton
             // 
-            this.ExcelButton.BackColor = System.Drawing.SystemColors.Control;
-            this.ExcelButton.Location = new System.Drawing.Point(9, 15);
+            this.ExcelButton.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.ExcelButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.ExcelButton.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.ExcelButton.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.ExcelButton.Location = new System.Drawing.Point(63, 8);
             this.ExcelButton.Name = "ExcelButton";
-            this.ExcelButton.Size = new System.Drawing.Size(100, 40);
-            this.ExcelButton.TabIndex = 15;
-            this.ExcelButton.Text = "Excel";
-            this.ExcelButton.UseVisualStyleBackColor = true;
+            this.ExcelButton.Size = new System.Drawing.Size(360, 40);
+            this.ExcelButton.TabIndex = 1;
+            this.ExcelButton.Text = "Создать";
+            this.ExcelButton.UseVisualStyleBackColor = false;
             this.ExcelButton.Click += new System.EventHandler(this.ImportExcelButton_Click);
             // 
             // TicketSizeContainer
             // 
             this.TicketSizeContainer.Controls.Add(this.SizeButton);
-            this.TicketSizeContainer.Controls.Add(this.Size58x40);
             this.TicketSizeContainer.Controls.Add(this.Size58x30);
-            this.TicketSizeContainer.Location = new System.Drawing.Point(9, 69);
+            this.TicketSizeContainer.Controls.Add(this.Size58x40);
+            this.TicketSizeContainer.Location = new System.Drawing.Point(63, 92);
             this.TicketSizeContainer.Margin = new System.Windows.Forms.Padding(0);
-            this.TicketSizeContainer.MaximumSize = new System.Drawing.Size(100, 120);
-            this.TicketSizeContainer.MinimumSize = new System.Drawing.Size(100, 40);
+            this.TicketSizeContainer.MaximumSize = new System.Drawing.Size(175, 90);
+            this.TicketSizeContainer.MinimumSize = new System.Drawing.Size(175, 30);
             this.TicketSizeContainer.Name = "TicketSizeContainer";
-            this.TicketSizeContainer.Size = new System.Drawing.Size(100, 40);
+            this.TicketSizeContainer.Size = new System.Drawing.Size(175, 30);
             this.TicketSizeContainer.TabIndex = 16;
             // 
             // SizeButton
@@ -232,41 +236,39 @@
             this.SizeButton.Location = new System.Drawing.Point(0, 0);
             this.SizeButton.Margin = new System.Windows.Forms.Padding(0);
             this.SizeButton.Name = "SizeButton";
-            this.SizeButton.Size = new System.Drawing.Size(100, 40);
-            this.SizeButton.TabIndex = 17;
+            this.SizeButton.Size = new System.Drawing.Size(175, 30);
+            this.SizeButton.TabIndex = 4;
             this.SizeButton.Text = "Размеры";
             this.SizeButton.UseVisualStyleBackColor = true;
             this.SizeButton.Click += new System.EventHandler(this.Button1_Click);
             // 
+            // Size58x30
+            // 
+            this.Size58x30.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Size58x30.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.Size58x30.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Size58x30.Location = new System.Drawing.Point(0, 30);
+            this.Size58x30.Margin = new System.Windows.Forms.Padding(0);
+            this.Size58x30.Name = "Size58x30";
+            this.Size58x30.Size = new System.Drawing.Size(175, 30);
+            this.Size58x30.TabIndex = 17;
+            this.Size58x30.Text = "58x30";
+            this.Size58x30.UseVisualStyleBackColor = false;
+            this.Size58x30.Click += new System.EventHandler(this.Size58x30_Click);
+            // 
             // Size58x40
             // 
             this.Size58x40.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Size58x40.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Size58x40.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Size58x40.Location = new System.Drawing.Point(0, 40);
+            this.Size58x40.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.Size58x40.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.Size58x40.Location = new System.Drawing.Point(0, 60);
             this.Size58x40.Margin = new System.Windows.Forms.Padding(0);
             this.Size58x40.Name = "Size58x40";
-            this.Size58x40.Size = new System.Drawing.Size(100, 40);
+            this.Size58x40.Size = new System.Drawing.Size(175, 30);
             this.Size58x40.TabIndex = 17;
             this.Size58x40.Text = "58x40";
-            this.Size58x40.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.Size58x40.UseVisualStyleBackColor = false;
             this.Size58x40.Click += new System.EventHandler(this.Size58x40_Click);
-            // 
-            // Size58x30
-            // 
-            this.Size58x30.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Size58x30.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Size58x30.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Size58x30.Location = new System.Drawing.Point(0, 80);
-            this.Size58x30.Margin = new System.Windows.Forms.Padding(0);
-            this.Size58x30.Name = "Size58x30";
-            this.Size58x30.Size = new System.Drawing.Size(100, 40);
-            this.Size58x30.TabIndex = 17;
-            this.Size58x30.Text = "58x30";
-            this.Size58x30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Size58x30.UseVisualStyleBackColor = false;
-            this.Size58x30.Click += new System.EventHandler(this.Size58x30_Click);
             // 
             // DropDownTimer
             // 
@@ -275,29 +277,29 @@
             // 
             // TokenButton
             // 
-            this.TokenButton.Location = new System.Drawing.Point(134, 69);
+            this.TokenButton.Location = new System.Drawing.Point(248, 54);
             this.TokenButton.Name = "TokenButton";
-            this.TokenButton.Size = new System.Drawing.Size(100, 40);
-            this.TokenButton.TabIndex = 17;
+            this.TokenButton.Size = new System.Drawing.Size(175, 30);
+            this.TokenButton.TabIndex = 3;
             this.TokenButton.Text = "Токен";
             this.TokenButton.UseVisualStyleBackColor = true;
             this.TokenButton.Click += new System.EventHandler(this.TokenButton_Click);
             // 
             // InformationButton
             // 
-            this.InformationButton.Location = new System.Drawing.Point(134, 121);
+            this.InformationButton.Location = new System.Drawing.Point(63, 54);
             this.InformationButton.Name = "InformationButton";
-            this.InformationButton.Size = new System.Drawing.Size(100, 40);
-            this.InformationButton.TabIndex = 18;
+            this.InformationButton.Size = new System.Drawing.Size(175, 30);
+            this.InformationButton.TabIndex = 2;
             this.InformationButton.Text = "Инфо";
             this.InformationButton.UseVisualStyleBackColor = true;
             this.InformationButton.Click += new System.EventHandler(this.InformationButton_Click);
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(16, 329);
+            this.progressBar1.Location = new System.Drawing.Point(12, 450);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(700, 20);
+            this.progressBar1.Size = new System.Drawing.Size(460, 20);
             this.progressBar1.Step = 1;
             this.progressBar1.TabIndex = 19;
             // 
@@ -305,7 +307,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(734, 361);
+            this.ClientSize = new System.Drawing.Size(484, 482);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.InformationButton);
             this.Controls.Add(this.TokenButton);
@@ -314,9 +316,10 @@
             this.Controls.Add(this.FolderButton);
             this.Controls.Add(this.ImagePanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainPage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Barcodes Generator";
+            this.Text = "WB Barcodes";
             this.Load += new System.EventHandler(this.FormLoad);
             ((System.ComponentModel.ISupportInitialize)(this.BarcodeIMG)).EndInit();
             this.ImagePanel.ResumeLayout(false);

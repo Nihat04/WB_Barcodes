@@ -4,7 +4,7 @@ namespace WildBerries_Barcodes.Scripts
 {
     public static class Barcode
     {
-        public static void GetImage(string barcodeText, PictureBox barcodeBox)
+        public static void SetImage(string barcodeText, PictureBox barcodeBox)
         {
             var barcodeNumbers = "888888888888";
 

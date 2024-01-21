@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Runtime.CompilerServices;
+using System.Text.Json;
 using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes
@@ -18,7 +19,19 @@ namespace WildBerries_Barcodes
             {
                 var jsonText = JsonSerializer.Deserialize<Info>(jsonFile);
                 Brand.Text = jsonText.Brand;
-                About.Text = jsonText.About;
+
+                var aboutText = jsonText.About.Trim().Replace("\r", "");
+
+                var nameUselessString = "Поставщик: ";
+                var cityUselessString = "\nг. ";
+
+                var nameStartIndex = aboutText.LastIndexOf(nameUselessString) + nameUselessString.Length;
+                var nameEndIndex = aboutText.IndexOf(cityUselessString);
+
+                var cityStartIndex = aboutText.LastIndexOf(cityUselessString) + cityUselessString.Length;
+
+                BuissnesName.Text = aboutText.Substring(nameStartIndex, nameEndIndex - nameStartIndex);
+                BuissnesCity.Text = aboutText.Substring(cityStartIndex);
             }
         }
         private void ButtonOK_Click(object sender, EventArgs e)
@@ -26,8 +39,7 @@ namespace WildBerries_Barcodes
             var data = new Info()
             {
                 Brand = this.Brand.Text,
-                About = this.About.Text,
-                //About = $"Поставщик: {1} г. {2}",
+                About = $"Поставщик: {BuissnesName.Text}\nг. {BuissnesCity.Text}",
             };
 
             var jsonText = JsonSerializer.Serialize(data);

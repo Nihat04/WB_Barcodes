@@ -7,7 +7,7 @@ using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes.Scripts
 {
-    public class Excel
+    public class ExcelReader
     {
         /// <summary>
         /// open excel file choose dialog
@@ -25,7 +25,6 @@ namespace WildBerries_Barcodes.Scripts
                 if (!(dialog.ShowDialog() == DialogResult.OK))
                     return "Error";
 
-                //var enc = CodePagesEncodingProvider.Instance.GetEncoding(1252);
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
                 File.Copy(dialog.FileName, temporaryExcelPath, true);
@@ -43,19 +42,34 @@ namespace WildBerries_Barcodes.Scripts
 
             if (jsonText == HttpStatusCode.Unauthorized.ToString())
             {
-                MessageBox.Show("Не удалось подключится к пользоателю WB. Проверьте токен подключения", "Ошибка подключения",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
+                MessageBox.Show("Не удалось подключится к пользоателю WB. Проверьте токен подключения", 
+                    "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new Tag { Error = true };
             }
 
             var jsonAsClass = JsonSerializer.Deserialize<Tag>(jsonText);
+
+            if(jsonAsClass.Data.Count <= 0)
+            {
+                MessageBox.Show("Не удалось идентифицировать товар. Проверьте корректность в файле", 
+                    "Ошибка файла", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new Tag { Error = true };
+            }
+
             jsonAsClass.FilterData(sellerArt);
+
             jsonAsClass.FilterSize(row.ItemArray[3].ToString());
-            jsonAsClass.Data[0].Count = int.Parse(row.ItemArray[4].ToString())*2;
+            if (jsonAsClass.Data[0].Sizes[0] == null)
+            {
+                MessageBox.Show("Не удалось идентифицировать размер товара. Проверьте корректность в файле",
+                    "Ошибка файла", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new Tag { Error = true };
+            }
+
+            jsonAsClass.Data[0].Count = int.Parse(row.ItemArray[4].ToString());
             jsonAsClass.Data[0].Color = row.ItemArray[2].ToString();
             jsonAsClass.Data[0].CartboxNumber = int.Parse(row.ItemArray[5].ToString());
             return jsonAsClass;
-            //Excel.AddColumn(Logic.GetBarcode(row.ItemArray[3], itemData.sizes), int.Parse(row.ItemArray[4].ToString()), int.Parse(row.ItemArray[5].ToString()));
         }
 
         public static DataRow[] ReadFile(string path)
@@ -68,19 +82,6 @@ namespace WildBerries_Barcodes.Scripts
             var rows = sheet.Select();
             file.Close();
             return rows;
-        }
-
-        public static void AddColumn(string barcode, int count, int CartonID)
-        {
-            var path = "template.txt";
-            var newText = $"{barcode} {count} {CartonID}\n";
-            if (File.Exists(path))
-            {
-                var file = File.ReadAllText(path);
-                newText = file + newText;
-            }
-
-            File.WriteAllText(path, newText);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using WBBarcodes.Properties;
 using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes.Scripts
@@ -71,7 +72,7 @@ namespace WildBerries_Barcodes.Scripts
             return dictionary;
         }
 
-        public static void RenderPanel(Panel panel, Tag row)
+        public static void RenderPanel(Panel panel, Tag tag)
         {
             Func<string, string, string> formatFunc = (constText, replaceText) => 
                 constText.Contains(':') ? $"{constText.Split(':')[0]}: {replaceText}": replaceText;
@@ -82,36 +83,34 @@ namespace WildBerries_Barcodes.Scripts
                 switch(control.Name)
                 {
                     case "BarcodeDigits":
-                        control.Text = formatFunc(control.Text, row.Data[0].Sizes[0].Barcode[0]);
+                        control.Text = formatFunc(control.Text, tag.Data[0].Sizes[0].Barcode[0]);
                         break;
 
                     case "BarcodeIMG":
-                        Barcode.GetImage(row.Data[0].Sizes[0].Barcode[0], control as PictureBox);
+                        Barcode.SetImage(tag.Data[0].Sizes[0].Barcode[0], control as PictureBox);
                         break;
 
                     case "Size":
-                        control.Text = formatFunc(control.Text, row.Data[0].Sizes[0].SellerSize);
+                        control.Text = formatFunc(control.Text, tag.Data[0].Sizes[0].SellerSize);
                         break;
 
                     case "Articul":
-                        control.Text = formatFunc(control.Text, row.Data[0].WbArticul.ToString());
+                        control.Text = formatFunc(control.Text, tag.Data[0].WbArticul.ToString());
                         break;
 
                     case "Color":
-                        control.Text = formatFunc(control.Text, row.Data[0].Color);
+                        control.Text = formatFunc(control.Text, tag.Data[0].Color);
                         break;
 
                     case "Country":
-                        control.Text = formatFunc(control.Text, row.Data[0].Characteristics[0].Country[0].ToString());
+                        control.Text = formatFunc(control.Text, tag.Data[0].Characteristics[0].Country[0].ToString());
                         break;
 
                     case "Type":
-                        control.Text = formatFunc(control.Text, row.Data[0].Object);
+                        control.Text = formatFunc(control.Text, tag.Data[0].Object);
                         break;
                 }
             }
-
-            PDF.AddPage(panel, row.Data[0].Count);
         }
     }
 }

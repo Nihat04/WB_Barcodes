@@ -147,14 +147,7 @@ namespace WildBerries_Barcodes.Scripts.JsonClasses
 
         public void FilterSize(string size)
         {
-            foreach(var item in this.Data[0].Sizes)
-            {
-                if(Equals(item.SellerSize, size))
-                {
-                    this.Data[0].Sizes = new List<Size> { item };
-                    return;
-                }
-            }
+            this.Data[0].Sizes = new List<Size> { this.Data[0].Sizes.Find(el => String.Equals(el.SellerSize, size)) };
         }
     }
 
