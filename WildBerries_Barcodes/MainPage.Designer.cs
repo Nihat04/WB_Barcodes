@@ -39,7 +39,6 @@
             this.About = new System.Windows.Forms.Label();
             this.BarcodeDigits = new System.Windows.Forms.Label();
             this.Size = new System.Windows.Forms.Label();
-            this.Color = new System.Windows.Forms.Label();
             this.Articul = new System.Windows.Forms.Label();
             this.FolderButton = new System.Windows.Forms.Button();
             this.ExcelButton = new System.Windows.Forms.Button();
@@ -80,14 +79,13 @@
             this.ImagePanel.Controls.Add(this.BarcodeDigits);
             this.ImagePanel.Controls.Add(this.BarcodeIMG);
             this.ImagePanel.Controls.Add(this.Size);
-            this.ImagePanel.Controls.Add(this.Color);
             this.ImagePanel.Controls.Add(this.Articul);
             this.ImagePanel.ForeColor = System.Drawing.SystemColors.ControlText;
             this.ImagePanel.Location = new System.Drawing.Point(24, 131);
-            this.ImagePanel.MaximumSize = new System.Drawing.Size(435, 300);
-            this.ImagePanel.MinimumSize = new System.Drawing.Size(435, 225);
+            this.ImagePanel.MaximumSize = new System.Drawing.Size(435, 275);
+            this.ImagePanel.MinimumSize = new System.Drawing.Size(435, 200);
             this.ImagePanel.Name = "ImagePanel";
-            this.ImagePanel.Size = new System.Drawing.Size(435, 225);
+            this.ImagePanel.Size = new System.Drawing.Size(435, 275);
             this.ImagePanel.TabIndex = 6;
             // 
             // Country
@@ -166,17 +164,6 @@
             this.Size.Size = new System.Drawing.Size(107, 30);
             this.Size.TabIndex = 2;
             this.Size.Text = "Размер: ";
-            // 
-            // Color
-            // 
-            this.Color.AutoSize = true;
-            this.Color.BackColor = System.Drawing.Color.Transparent;
-            this.Color.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Color.Location = new System.Drawing.Point(2, 164);
-            this.Color.Name = "Color";
-            this.Color.Size = new System.Drawing.Size(52, 21);
-            this.Color.TabIndex = 1;
-            this.Color.Text = "Цвет: ";
             // 
             // Articul
             // 
@@ -332,7 +319,6 @@
 
         #endregion
         private Panel ImagePanel;
-        private Label Color;
         private Label Articul;
         private Label Size;
         private PictureBox BarcodeIMG;

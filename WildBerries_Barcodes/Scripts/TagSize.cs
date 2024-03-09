@@ -43,9 +43,9 @@ namespace WildBerries_Barcodes.Scripts
             var freeSpace = controls["About"].Location.Y - controls["BarcodeDigits"].Location.Y + controls["BarcodeDigits"].Height;
             var compensation = controls["BarcodeDigits"].Location.Y + controls["BarcodeDigits"].Height;
 
-            controls["Size"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (1.0 / 4)) - controls["Size"].Height - 5);
-            controls["Articul"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (2.0 / 4)) - controls["About"].Height);
-            controls["Color"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (3.0 / 4)) - Convert.ToInt32(controls["Size"].Height * 1.2));
+            controls["Size"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (1.0 / 3)) - controls["Size"].Height - 5);
+            controls["Articul"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (2.0 / 3)) - controls["About"].Height);
+            //controls["Color"].Location = new Point(2, compensation + Convert.ToInt32(freeSpace * (3.0 / 4)) - Convert.ToInt32(controls["Size"].Height * 1.2));
         }
 
         private static Dictionary<string, Control> GetControls(Panel panel)

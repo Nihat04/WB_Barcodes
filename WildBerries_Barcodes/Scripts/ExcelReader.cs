@@ -35,9 +35,10 @@ namespace WildBerries_Barcodes.Scripts
 
         public static Tag GetTagFromRow(DataRow row)
         {
-            if (row.ItemArray[0].ToString().StartsWith("Артикуль") || Equals(row.ItemArray[0].ToString(), "")) return null;
+            if (row.ItemArray[0].ToString().StartsWith("Артикуль") || Equals(row.ItemArray[0].ToString(), ""))
+                return null;
 
-            var sellerArt = row.ItemArray[1].ToString();
+            var sellerArt = row.ItemArray[0].ToString();
             var jsonText = RestAPI.PostRequest(sellerArt);
 
             if (jsonText == HttpStatusCode.Unauthorized.ToString())
@@ -66,9 +67,22 @@ namespace WildBerries_Barcodes.Scripts
                 return new Tag { Error = true };
             }
 
-            jsonAsClass.Data[0].Count = int.Parse(row.ItemArray[4].ToString());
-            jsonAsClass.Data[0].Color = row.ItemArray[2].ToString();
-            jsonAsClass.Data[0].CartboxNumber = int.Parse(row.ItemArray[5].ToString());
+            var productCount = row.ItemArray[4].ToString();
+            var productColor = row.ItemArray[2].ToString();
+            var cartboxId = row.ItemArray[5].ToString();
+
+            if(productCount.Equals("") || !int.TryParse(productCount, out _))
+            {
+                MessageBox.Show("Неверно указано количество товара",
+                    "Ошибка количества", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new Tag { Error = true };
+            }
+            jsonAsClass.Data[0].Count = int.Parse(productCount);
+
+            if (!productColor.Equals(""))
+                jsonAsClass.Data[0].Color = row.ItemArray[2].ToString();
+            if(!cartboxId.Equals(""))
+                jsonAsClass.Data[0].CartboxNumber = int.Parse(row.ItemArray[5].ToString());
             return jsonAsClass;
         }
 
