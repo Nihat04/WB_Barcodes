@@ -3,6 +3,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Windows.Forms;
+using WBBarcodes;
+using WBBarcodes.Exceptions;
 using WBBarcodes.Properties;
 using WBBarcodes.Scripts;
 using WildBerries_Barcodes.Scripts;
@@ -35,7 +37,10 @@ namespace WildBerries_Barcodes
             progressBar1.Maximum = excelRows.Length;
             var progress = new Progress<int>(value =>
             {
-                progressBar1.Increment(value);
+                if (value == -1)
+                    progressBar1.Value = 0;
+                else
+                    progressBar1.Increment(value);
             });
 
             await Task.Run(() => GenerateFiles(excelRows, progress));
@@ -53,24 +58,34 @@ namespace WildBerries_Barcodes
 
             foreach (var row in excelRows)
             {
-                progress.Report(1);
-
-                var tag = ExcelReader.GetTagFromRow(row);
-
-                if (tag == null) continue;
-                if (tag.Error) return;
-
-                if (tag.Data[0] == null)
+                try
                 {
-                    MessageBox.Show("Some Error", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    progress.Report(1);
+
+                    var tag = ExcelReader.ConvertToTag(row);
+
+                    if (tag == null) continue;
+                    if (tag.Error) return;
+
+                    if (tag.Data[0] == null)
+                    {
+                        MessageBox.Show("Some Error", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    Scripts.TagSize.RenderPanel(panel, tag);
+                    pdf.AddPage(panel, tag.Data[0].Count);
+                    template.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count);
+                    shkTemplate.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count, tag.Data[0].CartboxNumber);
+                }
+                catch (OnRunException exception)
+                {
+                    MessageBox.Show(exception.Message, exception.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    progress.Report(-1);
                     return;
                 }
 
-                Scripts.TagSize.RenderPanel(panel, tag);
-                pdf.AddPage(panel, tag.Data[0].Count);
-                template.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count);
-                shkTemplate.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count, tag.Data[0].CartboxNumber);
             }
 
             Save(template, shkTemplate, pdf);

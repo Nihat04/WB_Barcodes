@@ -1,8 +1,10 @@
 ﻿using ExcelDataReader;
 using System.Data;
+using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using WBBarcodes.Exceptions;
 using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes.Scripts
@@ -33,50 +35,38 @@ namespace WildBerries_Barcodes.Scripts
             return temporaryExcelPath;
         }
 
-        public static Tag GetTagFromRow(DataRow row)
+        public static Tag ConvertToTag(DataRow row)
         {
             if (row.ItemArray[0].ToString().StartsWith("Артикуль") || Equals(row.ItemArray[0].ToString(), ""))
                 return null;
 
             var sellerArt = row.ItemArray[0].ToString();
-            var jsonText = RestAPI.PostRequest(sellerArt);
+            var response = RestAPI.RequestProduct(sellerArt, 3);
 
-            if (jsonText == HttpStatusCode.Unauthorized.ToString())
-            {
-                MessageBox.Show("Не удалось подключится к пользоателю WB. Проверьте токен подключения", 
-                    "Ошибка подключения", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return new Tag { Error = true };
-            }
+            if(response.StatusCode.Equals(HttpStatusCode.GatewayTimeout))
+                throw new TimeoutException();
 
-            var jsonAsClass = JsonSerializer.Deserialize<Tag>(jsonText);
+            if (response.StatusCode.Equals(HttpStatusCode.Unauthorized))
+                throw new OnRunException("Ошибка авторизации", "Не удалось авторизироваться, проверьте токен подключения");
+
+            var jsonAsClass = JsonSerializer.Deserialize<Tag>(response.Content.ReadAsStringAsync().Result);
 
             if(jsonAsClass.Data.Count <= 0)
-            {
-                MessageBox.Show("Не удалось идентифицировать товар. Проверьте корректность в файле", 
-                    "Ошибка файла", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return new Tag { Error = true };
-            }
+                throw new OnRunException("Ошибка товара", $"Не удалось найти товар: {sellerArt}");
 
             jsonAsClass.FilterData(sellerArt);
 
-            jsonAsClass.FilterSize(row.ItemArray[3].ToString());
+            var requiredSize = row.ItemArray[3].ToString();
+            jsonAsClass.FilterSize(requiredSize);
             if (jsonAsClass.Data[0].Sizes[0] == null)
-            {
-                MessageBox.Show("Не удалось идентифицировать размер товара. Проверьте корректность в файле",
-                    "Ошибка файла", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return new Tag { Error = true };
-            }
+                throw new OnRunException("Неверный размер", $"Не удалось найти размер {requiredSize} у {sellerArt}, проверьте файл");
 
             var productCount = row.ItemArray[4].ToString();
             var productColor = row.ItemArray[2].ToString();
             var cartboxId = row.ItemArray[5].ToString();
 
             if(productCount.Equals("") || !int.TryParse(productCount, out _))
-            {
-                MessageBox.Show("Неверно указано количество товара",
-                    "Ошибка количества", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return new Tag { Error = true };
-            }
+                throw new OnRunException("Неверное количество", "Не удалось прочитать кол-во товара, проверьте файл");
             jsonAsClass.Data[0].Count = int.Parse(productCount);
 
             if (!productColor.Equals(""))

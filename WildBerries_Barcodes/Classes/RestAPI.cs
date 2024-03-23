@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace WildBerries_Barcodes.Scripts
@@ -23,8 +24,9 @@ namespace WildBerries_Barcodes.Scripts
             }
         }
 
-        public static string PostRequest(string articul)
+        public static HttpResponseMessage RequestProduct(string articul)
         {
+            var attemptsCount = 3;
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
             client.BaseAddress = new Uri("https://suppliers-api.wildberries.ru");
@@ -32,15 +34,22 @@ namespace WildBerries_Barcodes.Scripts
             var json = "{  \"vendorCodes\": [    \"" + articul + "\"  ],  \"allowedCategoriesOnly\": true}";
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+
             var response = client.PostAsync("/content/v1/cards/filter", content).Result;
 
-            if (response.IsSuccessStatusCode)
+            return response;
+        }
+
+        public static HttpResponseMessage RequestProduct(string articul, int requestsAttempts)
+        {
+            for (int i = 0; i < requestsAttempts; i++)
             {
-                var responseContent = response.Content.ReadAsStringAsync().Result;
-                return responseContent;
+                var response = RequestProduct(articul);
+
+                if(response.IsSuccessStatusCode) 
+                    return response;
             }
-            else
-                return response.StatusCode.ToString();
+            return new HttpResponseMessage(HttpStatusCode.GatewayTimeout);
         }
     }
 }
