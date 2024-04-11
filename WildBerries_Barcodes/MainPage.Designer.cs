@@ -50,6 +50,7 @@
             this.TokenButton = new System.Windows.Forms.Button();
             this.InformationButton = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.BarcodeIMG)).BeginInit();
             this.ImagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EAC)).BeginInit();
@@ -82,13 +83,14 @@
             this.ImagePanel.Controls.Add(this.Size);
             this.ImagePanel.Controls.Add(this.Articul);
             this.ImagePanel.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.ImagePanel.Location = new System.Drawing.Point(34, 218);
+            this.ImagePanel.Location = new System.Drawing.Point(34, 275);
             this.ImagePanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ImagePanel.MaximumSize = new System.Drawing.Size(621, 457);
             this.ImagePanel.MinimumSize = new System.Drawing.Size(621, 332);
             this.ImagePanel.Name = "ImagePanel";
             this.ImagePanel.Size = new System.Drawing.Size(621, 332);
             this.ImagePanel.TabIndex = 6;
+            this.ImagePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.ImagePanel_Paint);
             // 
             // Country
             // 
@@ -302,11 +304,25 @@
             this.progressBar1.Step = 1;
             this.progressBar1.TabIndex = 19;
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.SystemColors.Control;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.button1.Location = new System.Drawing.Point(354, 214);
+            this.button1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(250, 50);
+            this.button1.TabIndex = 20;
+            this.button1.Text = "Соединить PDF";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.CombinePdfButton_Click);
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(691, 803);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.InformationButton);
             this.Controls.Add(this.TokenButton);
@@ -351,5 +367,6 @@
         private Button TokenButton;
         private Button InformationButton;
         private ProgressBar progressBar1;
+        private Button button1;
     }
 }

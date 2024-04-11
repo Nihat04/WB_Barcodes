@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using WBBarcodes.Classes.JsonClasses;
 using WBBarcodes.Exceptions;
 using WildBerries_Barcodes.Scripts.JsonClasses;
 
@@ -35,13 +36,16 @@ namespace WildBerries_Barcodes.Scripts
             return temporaryExcelPath;
         }
 
-        public static Tag ConvertToTag(DataRow row)
+        public static TagOld ConvertToTag(DataRow row)
         {
             if (row.ItemArray[0].ToString().StartsWith("Артикуль") || Equals(row.ItemArray[0].ToString(), ""))
                 return null;
 
             var sellerArt = row.ItemArray[0].ToString();
-            var response = RestAPI.RequestProduct(sellerArt, 3);
+            var response = RestAPI.RequestProduct(sellerArt);
+
+            if (response.StatusCode.Equals(HttpStatusCode.NotFound))
+                throw new OnRunException("Ошибка нахождения", $"Не удалось найти товар с артикулем \"{sellerArt}\"");
 
             if(response.StatusCode.Equals(HttpStatusCode.GatewayTimeout))
                 throw new TimeoutException();
@@ -49,9 +53,8 @@ namespace WildBerries_Barcodes.Scripts
             if (response.StatusCode.Equals(HttpStatusCode.Unauthorized))
                 throw new OnRunException("Ошибка авторизации", "Не удалось авторизироваться, проверьте токен подключения");
 
-            var jsonAsClass = JsonSerializer.Deserialize<Tag>(response.Content.ReadAsStringAsync().Result);
-
-            if(jsonAsClass.Data.Count <= 0)
+            var jsonAsClass = JsonSerializer.Deserialize<TagOld>(response.Content.ReadAsStringAsync().Result);
+            if (jsonAsClass.Data.Count <= 0)
                 throw new OnRunException("Ошибка товара", $"Не удалось найти товар: {sellerArt}");
 
             jsonAsClass.FilterData(sellerArt);
@@ -59,21 +62,37 @@ namespace WildBerries_Barcodes.Scripts
             var requiredSize = row.ItemArray[3].ToString();
             jsonAsClass.FilterSize(requiredSize);
             if (jsonAsClass.Data[0].Sizes[0] == null)
-                throw new OnRunException("Неверный размер", $"Не удалось найти размер {requiredSize} у {sellerArt}, проверьте файл");
+                throw new OnRunException("Неверный размер", $"Не удалось найти размер \"{requiredSize}\" у \"{sellerArt}\", проверьте файл");
 
             var productCount = row.ItemArray[4].ToString();
             var productColor = row.ItemArray[2].ToString();
             var cartboxId = row.ItemArray[5].ToString();
 
-            if(productCount.Equals("") || !int.TryParse(productCount, out _))
+            if (productCount.Equals("") || !int.TryParse(productCount, out _))
                 throw new OnRunException("Неверное количество", "Не удалось прочитать кол-во товара, проверьте файл");
             jsonAsClass.Data[0].Count = int.Parse(productCount);
 
             if (!productColor.Equals(""))
                 jsonAsClass.Data[0].Color = row.ItemArray[2].ToString();
-            if(!cartboxId.Equals(""))
+            if (!cartboxId.Equals(""))
                 jsonAsClass.Data[0].CartboxNumber = int.Parse(row.ItemArray[5].ToString());
             return jsonAsClass;
+        }
+
+        public static Card getCardFromProducts(DataRow row, TagV2 productsList)
+        {
+            if (row.ItemArray[0].ToString().StartsWith("Артикуль") || Equals(row.ItemArray[0].ToString(), ""))
+                return null;
+
+            var articul = row.ItemArray[0].ToString();
+
+            var card = productsList.Cards.Find(card => card.NmID.ToString().Equals(articul));
+
+            card.TagsCount = int.Parse(row.ItemArray[2].ToString());
+
+            card.RequiredSize = card.Sizes.Find(size => size.TechSize.Equals(row.ItemArray[1].ToString()));
+
+            return card;
         }
 
         public static DataRow[] ReadFile(string path)

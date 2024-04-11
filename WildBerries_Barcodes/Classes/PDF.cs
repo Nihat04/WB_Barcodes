@@ -1,8 +1,5 @@
 ﻿using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using System.Diagnostics;
-using WBBarcodes.Scripts;
-using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes.Scripts
 {

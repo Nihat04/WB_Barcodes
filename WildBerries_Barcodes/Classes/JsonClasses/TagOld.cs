@@ -118,7 +118,7 @@ namespace WildBerries_Barcodes.Scripts.JsonClasses
         public int CartboxNumber { get; set; }
     }
 
-    public class Tag
+    public class TagOld
     {
         [JsonPropertyName("data")]
         public List<Data>? Data { get; set; }

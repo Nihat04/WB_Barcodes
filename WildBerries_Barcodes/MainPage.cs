@@ -1,14 +1,21 @@
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 using System;
 using System.Data;
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 using System.Windows.Forms;
 using WBBarcodes;
+using WBBarcodes.Classes.JsonClasses;
 using WBBarcodes.Exceptions;
 using WBBarcodes.Properties;
 using WBBarcodes.Scripts;
 using WildBerries_Barcodes.Scripts;
 using WildBerries_Barcodes.Scripts.JsonClasses;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WildBerries_Barcodes
 {
@@ -53,6 +60,7 @@ namespace WildBerries_Barcodes
             var pdf = new PDF();
             var template = new ExcelTemplate();
             var shkTemplate = new ExcelTemplate(true);
+            var productsList = RestAPI.getAllProducts();
 
             var panel = ClonePanel(ImagePanel);
 
@@ -61,28 +69,24 @@ namespace WildBerries_Barcodes
                 try
                 {
                     progress.Report(1);
+                    var card = ExcelReader.getCardFromProducts(row, productsList);
 
-                    var tag = ExcelReader.ConvertToTag(row);
+                    if (card == null) continue;
 
-                    if (tag == null) continue;
-                    if (tag.Error) return;
-
-                    if (tag.Data[0] == null)
-                    {
-                        MessageBox.Show("Some Error", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    Scripts.TagSize.RenderPanel(panel, tag);
-                    pdf.AddPage(panel, tag.Data[0].Count);
-                    template.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count);
-                    shkTemplate.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count, tag.Data[0].CartboxNumber);
+                    Scripts.TagSize.RenderPanel(panel, card);
+                    pdf.AddPage(panel, card.TagsCount);
+                    //template.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count);
+                    //shkTemplate.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count, tag.Data[0].CartboxNumber);
                 }
                 catch (OnRunException exception)
                 {
-                    MessageBox.Show(exception.Message, exception.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     progress.Report(-1);
+                    MessageBox.Show(exception.Message, exception.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                } catch (TimeoutException)
+                {
+                    progress.Report(-1);
+                    MessageBox.Show("Время запроса вышло", "Ошибка запроса сервера", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -246,6 +250,48 @@ namespace WildBerries_Barcodes
                 About.Text = info.About;
                 Brand.Text = info.Brand;
             }
+        }
+
+        private void ImagePanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void CombinePdfButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new() { Filter = "PDF File (*.pdf)|*.pdf", ValidateNames = true, Multiselect = true })
+            {
+                if (!(dialog.ShowDialog() == DialogResult.OK))
+                    return;
+
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                var pdf = new PdfDocument();
+
+                for(int i = 0; i < dialog.FileNames.Length; i++)
+                {
+                    var file = dialog.FileNames[i];
+                    var fileName = GetName(file).Split('.')[0];
+                    var readPdf = PdfReader.Open(file, PdfDocumentOpenMode.Import);
+                    for(int j = 0; j < readPdf.PageCount; j++)
+                    {
+                        var page = readPdf.Pages[j];
+                        var newPage = pdf.AddPage(page);
+
+                        using(XGraphics gfx = XGraphics.FromPdfPage(newPage))
+                        {
+                            var font = new XFont("Arial", 10);
+                            gfx.DrawString(fileName, font, XBrushes.Black, new XRect(page.Width / 2 - 20, page.Height - 10, 20, 0), XStringFormats.Center);
+                        }
+                    }
+
+                }
+                pdf.Save("temp\\1.pdf");
+            }
+        }
+
+        public static string GetName(string path)
+        {
+            return Path.GetFileName(path);
         }
     }
 }
