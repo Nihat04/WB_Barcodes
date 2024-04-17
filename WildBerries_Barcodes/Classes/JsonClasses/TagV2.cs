@@ -63,6 +63,7 @@ namespace WBBarcodes.Classes.JsonClasses
 
         public int TagsCount { get; set; }
         public Size? RequiredSize { get; set; }
+        public int BoxId { get; set; }
     }
 
     public class Characteristic

@@ -75,8 +75,8 @@ namespace WildBerries_Barcodes
 
                     Scripts.TagSize.RenderPanel(panel, card);
                     pdf.AddPage(panel, card.TagsCount);
-                    //template.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count);
-                    //shkTemplate.AddColumn(tag.Data[0].Sizes[0].Barcode[0], tag.Data[0].Count, tag.Data[0].CartboxNumber);
+                    template.AddColumn(card.RequiredSize.Skus[0], card.TagsCount);
+                    shkTemplate.AddColumn(card.RequiredSize.Skus[0], card.TagsCount, card.BoxId);
                 }
                 catch (OnRunException exception)
                 {

@@ -92,6 +92,8 @@ namespace WildBerries_Barcodes.Scripts
 
             card.RequiredSize = card.Sizes.Find(size => size.TechSize.Equals(row.ItemArray[1].ToString()));
 
+            card.BoxId = int.Parse(row.ItemArray[3].ToString());
+
             return card;
         }
 
