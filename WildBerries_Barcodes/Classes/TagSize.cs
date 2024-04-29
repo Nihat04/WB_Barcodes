@@ -22,8 +22,8 @@ namespace WildBerries_Barcodes.Scripts
         {
             var controls = GetControls(panel);
         
-            controls["About"].Location = new Point(2, panel.Height - controls["About"].Height - 2);
-            controls["Country"].Location = new Point(panel.Width - controls["Country"].Width - 2, panel.Height - controls["Country"].Height - 2);
+            controls["About"].Location = new Point(2, panel.Height - controls["About"].Height - 10);
+            controls["Country"].Location = new Point(panel.Width - controls["Country"].Width - 2, panel.Height - controls["Country"].Height - 10);
             controls["Brand"].Location = new Point(2, 2);
             controls["Type"].Location = new Point(panel.Width / 2 - controls["Type"].Width / 2, 2);
 
