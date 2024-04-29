@@ -39,31 +39,33 @@ namespace WildBerries_Barcodes.Scripts
         public static Card getCardFromProducts(DataRow row, TagV2 productsList)
         {
             var articul = row.ItemArray[0].ToString();
-            var size = row.ItemArray[1].ToString();
-            var count = row.ItemArray[2].ToString();
-            var cartBoxNumber = row.ItemArray[3].ToString();
 
             if (articul.StartsWith("Артикуль") || Equals(articul, ""))
                 return null;
 
+            var size = row.ItemArray[1].ToString().ToLower();
+            var count = 0;
+            var countIsNumber = int.TryParse(row.ItemArray[2].ToString(), out count);
+            var cartBoxNumber = row.ItemArray[3].ToString();
+            var productsCount = productsList.Cards.Count();
             var card = productsList.Cards.Find(card => card.NmID.ToString().Equals(articul));
 
             while(card == null)
             {
                 productsList.getMore();
                 card = productsList.Cards.Find(card => card.NmID.ToString().Equals(articul));
+
+                if (productsList.Cards.Count <= productsCount) throw new OnRunException("Ошибка артикуля", $"Не удалось найти товар с арттикулем \"{articul}\"");
+                productsCount = productsList.Cards.Count;
             }
 
-            card.TagsCount = int.Parse(row.ItemArray[2].ToString());
+            card.RequiredSize = card.Sizes.Find(cardSize => cardSize.TechSize.ToLower().Equals(size));
+            card.TagsCount = count;
 
-            card.RequiredSize = card.Sizes.Find(size => size.TechSize.Equals(size));
+            if (card.RequiredSize == null) throw new OnRunException("Ошибка размера", $"Не удалось найти размер {size} у товара с артикулем \"{articul}\"");
+            if (!countIsNumber) throw new OnRunException("Ошибка количества", $"Неверно указано количество товара");
 
-            if (card.RequiredSize == null) throw new OnRunException("Ошибка размера", $"Не удалось найти размер {}");
-
-            if (!row.ItemArray[3].ToString().Equals("") && int.TryParse(row.ItemArray[3].ToString(), out _))
-            {
-                card.BoxId = int.Parse(row.ItemArray[3].ToString());
-            }
+            if (!cartBoxNumber.Equals("") && int.TryParse(cartBoxNumber, out _)) card.BoxId = int.Parse(row.ItemArray[3].ToString());
 
             return card;
         }

@@ -12,6 +12,8 @@ namespace WBBarcodes.Classes.JsonClasses
         [JsonPropertyName("cursor")]
         public Cursor Cursor { get; set; }
 
+        public bool error { get; set; }
+
         public TagV2 getMore()
         {
             var moreProducts = RestAPI.getAllProducts(this.Cursor.UpdatedAt, this.Cursor.NmID);
