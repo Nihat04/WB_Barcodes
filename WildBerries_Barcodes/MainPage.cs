@@ -30,7 +30,7 @@ namespace WildBerries_Barcodes
 
         private void FolderOpenButton_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", $@"PDF's folder");
+            Process.Start("explorer.exe", Environment.CurrentDirectory);
         }
 
         private async void ImportExcelButton_Click(object sender, EventArgs e)
@@ -149,12 +149,12 @@ namespace WildBerries_Barcodes
 
         private void Save(ExcelTemplate template1, ExcelTemplate template2, PDF pdf)
         {
-            const string folderPath = @"PDF's folder";
+            const string folderPath = @"Tags";
 
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
-            var fileFolderName = DateTime.Now.ToString("dd.MM.yyyy_HH-mm");
+            var fileFolderName = DateTime.Now.ToString("yyyy.MM.dd_HH-mm");
             Directory.CreateDirectory(Path.Combine(folderPath, fileFolderName));
 
             string fileFolder = Path.Combine(folderPath, fileFolderName);
@@ -259,6 +259,11 @@ namespace WildBerries_Barcodes
 
         private void CombinePdfButton_Click(object sender, EventArgs e)
         {
+            const string folderName = "Combined_files";
+
+            if (!Directory.Exists(folderName))
+                Directory.CreateDirectory(folderName);
+
             using (OpenFileDialog dialog = new() { Filter = "PDF File (*.pdf)|*.pdf", ValidateNames = true, Multiselect = true })
             {
                 if (!(dialog.ShowDialog() == DialogResult.OK))
@@ -285,7 +290,9 @@ namespace WildBerries_Barcodes
                     }
 
                 }
-                pdf.Save("temp\\1.pdf");
+
+                var finalFileName = DateTime.Now.ToString("dd.MM.yyyy_HH-mm");
+                pdf.Save($"{folderName}\\{finalFileName}.pdf");
             }
         }
 

@@ -1,4 +1,6 @@
-﻿using System.Configuration;
+﻿using SixLabors.Fonts.Tables.AdvancedTypographic;
+using System.Configuration;
+using System.Text.Json;
 using WBBarcodes.Classes.JsonClasses;
 using WBBarcodes.Properties;
 using WildBerries_Barcodes.Scripts.JsonClasses;
@@ -106,8 +108,10 @@ namespace WildBerries_Barcodes.Scripts
                     //    break;
 
                     case "Country":
-                        //control.Text = formatFunc(control.Text, "UNKNOWN");
-                        control.Text = "Срок годности не ограничен";
+                        var countryCharacteristic = card.Characteristics.Find(charact => charact.Name.Equals("Страна производства"));
+                        var objAsDynamic = countryCharacteristic.Value as dynamic;
+                        var countryArray = JsonSerializer.Deserialize<string[]>(objAsDynamic);
+                        control.Text = formatFunc(control.Text, countryArray[0]);
                         break;
 
                     case "Type":
