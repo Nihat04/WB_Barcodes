@@ -16,5 +16,11 @@ namespace WildBerries_Barcodes.Scripts
 
             barcodeBox.Image = barcode.Encode(BarcodeLib.TYPE.EAN13, barcodeNumbers, Color.Black, Color.Transparent, barcodeBox.Width, barcodeBox.Height);
         }
+
+        public static Image GetImage(string barcodeText)
+        {
+            var barcode = new BarcodeLib.Barcode();
+            return barcode.Encode(BarcodeLib.TYPE.CODE128, barcodeText, Color.Black, Color.Transparent, 520, 250);
+        }
     }
 }

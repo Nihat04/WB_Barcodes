@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Windows.Forms;
 using WBBarcodes;
+using WBBarcodes.Classes;
 using WBBarcodes.Classes.JsonClasses;
 using WBBarcodes.Exceptions;
 using WBBarcodes.Properties;
@@ -50,49 +51,11 @@ namespace WildBerries_Barcodes
                     progressBar1.Increment(value);
             });
 
-            await Task.Run(() => GenerateFiles(excelRows, progress));
-
-            File.Delete(excelPath);
-        }
-
-        private void GenerateFiles(DataRow[] excelRows, IProgress<int> progress)
-        {
-            var pdf = new PDF();
-            var template = new ExcelTemplate();
-            var shkTemplate = new ExcelTemplate(true);
-            var productsList = RestAPI.getAllProducts();
-
             var panel = ClonePanel(ImagePanel);
 
-            foreach (var row in excelRows)
-            {
-                try
-                {
-                    progress.Report(1);
-                    var card = ExcelReader.getCardFromProducts(row, productsList);
+            await Task.Run(() => FileManager.GenerateWbFiles(excelRows, progress, panel));
 
-                    if (card == null) continue;
-
-                    Scripts.TagSize.RenderPanel(panel, card);
-                    pdf.AddPage(panel, card.TagsCount);
-                    template.AddColumn(card.RequiredSize.Skus[0], card.TagsCount);
-                    shkTemplate.AddColumn(card.RequiredSize.Skus[0], card.TagsCount, card.BoxId);
-                }
-                catch (OnRunException exception)
-                {
-                    progress.Report(-1);
-                    MessageBox.Show(exception.Message, exception.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                } catch (TimeoutException)
-                {
-                    progress.Report(-1);
-                    MessageBox.Show("Время запроса вышло", "Ошибка запроса сервера", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-            }
-
-            Save(template, shkTemplate, pdf);
+            File.Delete(excelPath);
         }
 
         private Panel ClonePanel(Panel panel)
@@ -147,28 +110,29 @@ namespace WildBerries_Barcodes
             return clonedPanel;
         }
 
-        private void Save(ExcelTemplate template1, ExcelTemplate template2, PDF pdf)
-        {
-            const string folderPath = @"Tags";
-
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-
-            var fileFolderName = DateTime.Now.ToString("yyyy.MM.dd_HH-mm");
-            Directory.CreateDirectory(Path.Combine(folderPath, fileFolderName));
-
-            string fileFolder = Path.Combine(folderPath, fileFolderName);
-
-            pdf.Save(fileFolder);
-            template1.Save(fileFolder);
-            template2.Save(fileFolder);
-
-            Process.Start("explorer.exe", fileFolder);
-        }
-
         private void Button1_Click(object sender, EventArgs e)
         {
             DropDownTimer.Start();
+            //var names = new List<string>() 
+            //{
+            //    "Fullstar 2000000003122",
+            //    "Cracpot 2000000003894",
+            //    "Supership 2000000004617",
+            //    "Starking 2000000002606",
+            //    "LONN 2000000004969",
+            //    "NENS 2000000012650",
+            //    "Kristar 2000000008684"
+            //};
+
+            //var pdf = new PDF();
+
+            //foreach (var name in names)
+            //{
+            //    var splitName = name.Split(' ');
+            //    pdf.AddPage(splitName[0], splitName[1]);
+            //}
+
+            //pdf.Save("mtsEvotor");
         }
 
         private void Size58x40_Click(object sender, EventArgs e)
@@ -257,6 +221,28 @@ namespace WildBerries_Barcodes
 
         }
 
+        private async void ExcelOzonButton_Click(object sender, EventArgs e)
+        {
+            var excelPath = ExcelReader.ChooseFile();
+            if (excelPath == "Error") return;
+
+            var excelRows = ExcelReader.ReadFile(excelPath);
+
+            progressBar1.Value = 0;
+            progressBar1.Maximum = excelRows.Length;
+            var progress = new Progress<int>(value =>
+            {
+                if (value == -1)
+                    progressBar1.Value = 0;
+                else
+                    progressBar1.Increment(value);
+            });
+
+            await Task.Run(() => FileManager.GenerateOzonFiles(excelRows, progress));
+
+            File.Delete(excelPath);
+        }
+
         private void CombinePdfButton_Click(object sender, EventArgs e)
         {
             const string folderName = "Combined_files";
@@ -285,7 +271,7 @@ namespace WildBerries_Barcodes
                         using(XGraphics gfx = XGraphics.FromPdfPage(newPage))
                         {
                             var font = new XFont("Arial", 10);
-                            gfx.DrawString(fileName, font, XBrushes.Black, new XRect(page.Width / 2 - 20, page.Height - 10, 20, 0), XStringFormats.Center);
+                            gfx.DrawString(fileName, font, XBrushes.Black, new XRect(page.Width / 2 - 5, page.Height - 10, 20, 0), XStringFormats.Center);
                         }
                     }
 

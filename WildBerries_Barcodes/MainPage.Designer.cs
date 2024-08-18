@@ -51,6 +51,7 @@
             this.InformationButton = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.button1 = new System.Windows.Forms.Button();
+            this.ExcelOzonButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.BarcodeIMG)).BeginInit();
             this.ImagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EAC)).BeginInit();
@@ -317,11 +318,25 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.CombinePdfButton_Click);
             // 
+            // ExcelOzonButton
+            // 
+            this.ExcelOzonButton.BackColor = System.Drawing.SystemColors.Control;
+            this.ExcelOzonButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.ExcelOzonButton.Location = new System.Drawing.Point(90, 218);
+            this.ExcelOzonButton.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.ExcelOzonButton.Name = "ExcelOzonButton";
+            this.ExcelOzonButton.Size = new System.Drawing.Size(250, 50);
+            this.ExcelOzonButton.TabIndex = 21;
+            this.ExcelOzonButton.Text = "OZON TAGS";
+            this.ExcelOzonButton.UseVisualStyleBackColor = true;
+            this.ExcelOzonButton.Click += new System.EventHandler(this.ExcelOzonButton_Click);
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(691, 803);
+            this.Controls.Add(this.ExcelOzonButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.InformationButton);
@@ -368,5 +383,6 @@
         private Button InformationButton;
         private ProgressBar progressBar1;
         private Button button1;
+        private Button ExcelOzonButton;
     }
 }
