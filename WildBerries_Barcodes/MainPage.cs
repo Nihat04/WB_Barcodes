@@ -1,22 +1,13 @@
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
-using System;
-using System.Data;
 using System.Diagnostics;
-using System.Text;
+using System.IO;
 using System.Text.Json;
-using System.Windows.Forms;
-using WBBarcodes;
+using WBBarcodes.Api;
 using WBBarcodes.Classes;
-using WBBarcodes.Classes.JsonClasses;
-using WBBarcodes.Exceptions;
 using WBBarcodes.Properties;
-using WBBarcodes.Scripts;
-using WildBerries_Barcodes.Scripts;
 using WildBerries_Barcodes.Scripts.JsonClasses;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WildBerries_Barcodes
 {
@@ -36,10 +27,10 @@ namespace WildBerries_Barcodes
 
         private async void ImportExcelButton_Click(object sender, EventArgs e)
         {
-            var excelPath = ExcelReader.ChooseFile();
+            var excelPath = FilesManager.ChooseFile();
             if (excelPath == "Error") return;
 
-            var excelRows = ExcelReader.ReadFile(excelPath);
+            var excelRows = Excel.ReadFile(excelPath);
 
             progressBar1.Value = 0;
             progressBar1.Maximum = excelRows.Length;
@@ -51,63 +42,11 @@ namespace WildBerries_Barcodes
                     progressBar1.Increment(value);
             });
 
-            var panel = ClonePanel(ImagePanel);
+            var panel = FormsManager.ClonePanel(ImagePanel);
 
-            await Task.Run(() => FileManager.GenerateWbFiles(excelRows, progress, panel));
+            await Task.Run(() => FilesManager.GenerateWbFiles(excelRows, progress, panel));
 
             File.Delete(excelPath);
-        }
-
-        private Panel ClonePanel(Panel panel)
-        {
-            var clonedPanel = new Panel();
-
-            clonedPanel.Size = panel.Size;
-            clonedPanel.BackColor = System.Drawing.Color.White;
-            clonedPanel.BorderStyle = panel.BorderStyle;
-
-            var panelControls = panel.Controls;
-
-            foreach (Control control in panelControls)
-            {
-                if (control.GetType().Name == "Label")
-                {
-                    var controlAsLabel = control as Label;
-                    var clonedControl = new Label();
-
-                    clonedControl.Text = controlAsLabel.Text;
-                    clonedControl.Font = controlAsLabel.Font;
-                    clonedControl.Name = controlAsLabel.Name;
-                    clonedControl.BackColor = controlAsLabel.BackColor;
-                    clonedControl.TextAlign = controlAsLabel.TextAlign;
-
-                    clonedControl.AutoSize = controlAsLabel.AutoSize;
-
-                    clonedPanel.Controls.Add(clonedControl);
-                }
-                else if (control.GetType().Name == "PictureBox")
-                {
-                    var controlAsPictureBox = control as PictureBox;
-                    var clonedControl = new PictureBox();
-
-                    clonedControl.Size = controlAsPictureBox.Size;
-                    clonedControl.MaximumSize = controlAsPictureBox.MaximumSize;
-                    clonedControl.Name = controlAsPictureBox.Name;
-                    clonedControl.BackColor = controlAsPictureBox.BackColor;
-                    clonedControl.Location = controlAsPictureBox.Location;
-
-                    if(clonedControl.Name == "EAC")
-                    {
-                        clonedControl.SizeMode = PictureBoxSizeMode.StretchImage;
-                        clonedControl.Image = Resources.EAC;
-                    }
-
-                    clonedPanel.Controls.Add(clonedControl);
-                }
-            }
-
-            TagSize.Change(clonedPanel);
-            return clonedPanel;
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -135,42 +74,6 @@ namespace WildBerries_Barcodes
             //pdf.Save("mtsEvotor");
         }
 
-        private void Size58x40_Click(object sender, EventArgs e)
-        {
-            ImagePanel.Size = ImagePanel.MaximumSize;
-            Scripts.TagSize.Change(ImagePanel);
-            DropDownTimer.Start();
-        }
-
-        private void Size58x30_Click(object sender, EventArgs e)
-        {
-            ImagePanel.Size = ImagePanel.MinimumSize;
-            Scripts.TagSize.Change(ImagePanel);
-            DropDownTimer.Start();
-        }
-
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            if (Expand)
-            {
-                TicketSizeContainer.Height -= 10;
-                if (TicketSizeContainer.Height <= TicketSizeContainer.MinimumSize.Height)
-                {
-                    DropDownTimer.Stop();
-                    Expand = false;
-                }
-            }
-            else
-            {
-                TicketSizeContainer.Height += 10;
-                if (TicketSizeContainer.Height >= TicketSizeContainer.MaximumSize.Height)
-                {
-                    DropDownTimer.Stop();
-                    Expand = true;
-                }
-            }
-        }
-
         private void TokenButton_Click(object sender, EventArgs e)
         {
             Form form = new TokenPage();
@@ -179,7 +82,7 @@ namespace WildBerries_Barcodes
             {
                 var controls = form.Controls;
                 var textBox = controls.Find("TokenBox", true)[0].Text;
-                RestAPI.Token = textBox;
+                WildBerriesAPI.Token = textBox;
             }
         }
 
@@ -223,10 +126,10 @@ namespace WildBerries_Barcodes
 
         private async void ExcelOzonButton_Click(object sender, EventArgs e)
         {
-            var excelPath = ExcelReader.ChooseFile();
+            var excelPath = FilesManager.ChooseFile();
             if (excelPath == "Error") return;
 
-            var excelRows = ExcelReader.ReadFile(excelPath);
+            var excelRows = Excel.ReadFile(excelPath);
 
             progressBar1.Value = 0;
             progressBar1.Maximum = excelRows.Length;
@@ -238,7 +141,7 @@ namespace WildBerries_Barcodes
                     progressBar1.Increment(value);
             });
 
-            await Task.Run(() => FileManager.GenerateOzonFiles(excelRows, progress));
+            await Task.Run(() => FilesManager.GenerateOzonFiles(excelRows, progress));
 
             File.Delete(excelPath);
         }
@@ -261,7 +164,7 @@ namespace WildBerries_Barcodes
                 for(int i = 0; i < dialog.FileNames.Length; i++)
                 {
                     var file = dialog.FileNames[i];
-                    var fileName = GetName(file).Split('.')[0];
+                    var fileName = Path.GetFileName(file).Split('.')[0];
                     var readPdf = PdfReader.Open(file, PdfDocumentOpenMode.Import);
                     for(int j = 0; j < readPdf.PageCount; j++)
                     {
@@ -280,11 +183,6 @@ namespace WildBerries_Barcodes
                 var finalFileName = DateTime.Now.ToString("dd.MM.yyyy_HH-mm");
                 pdf.Save($"{folderName}\\{finalFileName}.pdf");
             }
-        }
-
-        public static string GetName(string path)
-        {
-            return Path.GetFileName(path);
         }
     }
 }

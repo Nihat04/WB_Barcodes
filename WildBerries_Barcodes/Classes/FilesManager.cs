@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using WBBarcodes.Api;
 using WBBarcodes.Exceptions;
-using WBBarcodes.Scripts;
 using WildBerries_Barcodes.Scripts;
 
 namespace WBBarcodes.Classes
 {
-    public class FileManager
+    public class FilesManager
     {
-
+        private List<Classes.File<object>> Files {  get; set; }
         public static void GenerateOzonFiles(DataRow[] excelRows, IProgress<int> progress)
         {
             var pdf = new PDF();
-            var productsList = OzonExcel.GetProducts();
+            var productsList = Ozon.GetProducts();
 
             foreach (var row in excelRows)
             {
@@ -26,7 +24,7 @@ namespace WBBarcodes.Classes
                 {
                     progress.Report(1);
                     if (row.ItemArray[0].ToString().Equals("")) continue;
-                    var card = OzonExcel.GetProducts(row, productsList);
+                    var card = Ozon.GetProducts(row, productsList);
                     if (card == null) throw new OnRunException("There is no such product", $"cannot find product with articul {row.ItemArray[0].ToString()}");
                     var count = int.Parse(row.ItemArray[2].ToString());
                     pdf.AddPage(card, count * 2);
@@ -52,16 +50,16 @@ namespace WBBarcodes.Classes
         public static void GenerateWbFiles(DataRow[] excelRows, IProgress<int> progress, Panel panel)
         {
             var pdf = new PDF();
-            var template = new ExcelTemplate();
-            var shkTemplate = new ExcelTemplate(true);
-            var productsList = RestAPI.getAllProducts();
+            var template = new Excel();
+            var shkTemplate = new Excel(true);
+            var productsList = WildBerriesAPI.getAllProducts();
 
             foreach (var row in excelRows)
             {
                 try
                 {
                     progress.Report(1);
-                    var card = ExcelReader.getCardFromProducts(row, productsList);
+                    var card = Excel.getCardFromProducts(row, productsList);
 
                     if (card == null) continue;
 
@@ -88,7 +86,7 @@ namespace WBBarcodes.Classes
             Save(template, shkTemplate, pdf);
         }
 
-        private static void Save(ExcelTemplate template1, ExcelTemplate template2, PDF pdf)
+        private static void Save(Excel template1, Excel template2, PDF pdf)
         {
             const string folderPath = @"Tags";
 
@@ -105,6 +103,30 @@ namespace WBBarcodes.Classes
             template2.Save(fileFolder);
 
             Process.Start("explorer.exe", fileFolder);
+        }
+
+        /// <summary>
+        /// open excel file choose dialog
+        /// </summary>
+        /// <returns>created temporary file path</returns>
+        public static string ChooseFile()
+        {
+            if (!Directory.Exists("temp"))
+                Directory.CreateDirectory("temp");
+
+            const string temporaryExcelPath = @"temp\temporaryExcel.xlsx";
+
+            using (OpenFileDialog dialog = new() { Filter = "Excel WorkBook|*.xlsx", ValidateNames = true })
+            {
+                if (!(dialog.ShowDialog() == DialogResult.OK))
+                    return "Error";
+
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+                File.Copy(dialog.FileName, temporaryExcelPath, true);
+            }
+
+            return temporaryExcelPath;
         }
     }
 }

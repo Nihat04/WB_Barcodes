@@ -4,9 +4,9 @@ using System.Text;
 using System.Text.Json;
 using WBBarcodes.Classes.JsonClasses;
 
-namespace WildBerries_Barcodes.Scripts
+namespace WBBarcodes.Api
 {
-    public static class RestAPI
+    public static class WildBerriesAPI
     {
         public static string Token
         {

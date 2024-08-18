@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using WildBerries_Barcodes.Scripts;
+using WBBarcodes.Api;
 
 namespace WBBarcodes.Classes.JsonClasses
 {
@@ -16,7 +16,7 @@ namespace WBBarcodes.Classes.JsonClasses
 
         public TagV2 getMore()
         {
-            var moreProducts = RestAPI.getAllProducts(this.Cursor.UpdatedAt, this.Cursor.NmID);
+            var moreProducts = WildBerriesAPI.getAllProducts(this.Cursor.UpdatedAt, this.Cursor.NmID);
 
             moreProducts.Cards.ForEach(card => this.Cards.Add(card));
             this.Cursor = moreProducts.Cursor;

@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using WildBerries_Barcodes.Scripts;
+using WBBarcodes.Api;
 
 namespace WildBerries_Barcodes
 {
@@ -19,7 +19,7 @@ namespace WildBerries_Barcodes
 
         private void OnLoad(object sender, EventArgs e)
         {
-            TokenBox.Text = RestAPI.Token;
+            TokenBox.Text = WildBerriesAPI.Token;
         }
     }
 }

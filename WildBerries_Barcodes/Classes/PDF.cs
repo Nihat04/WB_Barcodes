@@ -4,15 +4,12 @@ using WBBarcodes.Classes;
 
 namespace WildBerries_Barcodes.Scripts
 {
-    internal class PDF
+    internal class PDF: File<PdfDocument>
     {
-
-        private PdfDocument PDFile;
-
         public PDF()
         {
-            PDFile = new PdfDocument();
-            PDFile.Info.Title = "created with WbBarcode";
+            Item = new PdfDocument();
+            Item.Info.Title = "created with WbBarcode";
         }
 
         /// <summary>
@@ -31,7 +28,7 @@ namespace WildBerries_Barcodes.Scripts
 
             for (int i = 0; i < doubleQuantity; i++)
             {
-                var page = PDFile.AddPage();
+                var page = Item.AddPage();
                 page.Width = panel.Width;
                 page.Height = panel.Height;
 
@@ -45,7 +42,7 @@ namespace WildBerries_Barcodes.Scripts
             for(int i = 0; i < quantity; i++)
             {
                 var barcodeImg = Barcode.GetImage(product.Barcode);
-                var page = PDFile.AddPage();
+                var page = Item.AddPage();
                 page.Width = 580;
                 page.Height = 300;
 
@@ -68,7 +65,7 @@ namespace WildBerries_Barcodes.Scripts
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
             var barcodeImg = Barcode.GetImage(barcode);
-            var page = PDFile.AddPage();
+            var page = Item.AddPage();
             page.Width = 580;
             page.Height = 300;
 
@@ -83,9 +80,9 @@ namespace WildBerries_Barcodes.Scripts
             gfx.DrawString(name, new XFont("Arial", 40), XBrushes.Black, new XRect(30, 270, 14, 0), XStringFormats.BaseLineLeft);
         }
 
-        public void Save(string folderPath)
+        public override void Save(string folderPath)
         {
-            if (PDFile.PageCount == 0)
+            if (Item.PageCount == 0)
             {
                 MessageBox.Show("Нельзя сохранить файл с отсутствующими страницами", "Ошибка сохранения PDF", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -93,7 +90,7 @@ namespace WildBerries_Barcodes.Scripts
             }
 
             var filePath = Path.Combine(folderPath, "tags.pdf");
-            PDFile.Save(filePath);
+            Item.Save(filePath);
         }
 
         public Bitmap GetPanelAsImage(Panel FinalPanel)
