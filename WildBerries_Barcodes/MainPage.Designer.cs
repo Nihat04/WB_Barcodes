@@ -46,7 +46,7 @@
             TokenButton = new Button();
             InformationButton = new Button();
             progressBar1 = new ProgressBar();
-            button1 = new Button();
+            CombinePdfButton = new Button();
             OzonButton = new Button();
             ((System.ComponentModel.ISupportInitialize)BarcodeIMG).BeginInit();
             ImagePanel.SuspendLayout();
@@ -91,6 +91,7 @@
             Country.AutoSize = true;
             Country.BackColor = Color.Transparent;
             Country.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            Country.ForeColor = Color.Black;
             Country.Location = new Point(234, 158);
             Country.Name = "Country";
             Country.Size = new Size(197, 38);
@@ -102,7 +103,7 @@
             Brand.AutoSize = true;
             Brand.BackColor = Color.Transparent;
             Brand.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            Brand.Location = new Point(10, 0);
+            Brand.Location = new Point(10, 1);
             Brand.Margin = new Padding(0);
             Brand.Name = "Brand";
             Brand.Size = new Size(45, 19);
@@ -121,14 +122,17 @@
             // 
             // Type
             // 
+            Type.Anchor = AnchorStyles.None;
             Type.AutoSize = true;
             Type.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            Type.Location = new Point(181, 0);
+            Type.ForeColor = Color.Black;
+            Type.Location = new Point(198, 1);
             Type.Margin = new Padding(0);
             Type.Name = "Type";
             Type.Size = new Size(32, 19);
             Type.TabIndex = 8;
             Type.Text = "Тип";
+            Type.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // About
             // 
@@ -146,7 +150,7 @@
             BarcodeDigits.AutoSize = true;
             BarcodeDigits.BackColor = Color.Transparent;
             BarcodeDigits.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            BarcodeDigits.Location = new Point(154, 75);
+            BarcodeDigits.Location = new Point(158, 75);
             BarcodeDigits.Name = "BarcodeDigits";
             BarcodeDigits.Size = new Size(118, 21);
             BarcodeDigits.TabIndex = 4;
@@ -157,9 +161,9 @@
             Size.AutoSize = true;
             Size.BackColor = Color.Transparent;
             Size.Font = new Font("Segoe UI Black", 16F, FontStyle.Bold, GraphicsUnit.Point);
-            Size.Location = new Point(2, 98);
+            Size.Location = new Point(10, 93);
             Size.Name = "Size";
-            Size.Size = new Size(107, 30);
+            Size.Size = new Size(63, 30);
             Size.TabIndex = 2;
             Size.Text = "Размер: ";
             // 
@@ -168,7 +172,7 @@
             Articul.AutoSize = true;
             Articul.BackColor = Color.Transparent;
             Articul.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            Articul.Location = new Point(2, 127);
+            Articul.Location = new Point(10, 126);
             Articul.Name = "Articul";
             Articul.Size = new Size(107, 30);
             Articul.TabIndex = 0;
@@ -182,7 +186,7 @@
             FolderButton.Margin = new Padding(4, 5, 4, 5);
             FolderButton.Name = "FolderButton";
             FolderButton.Size = new Size(360, 30);
-            FolderButton.TabIndex = 5;
+            FolderButton.TabIndex = 6;
             FolderButton.Text = "Папка";
             FolderButton.UseVisualStyleBackColor = true;
             FolderButton.Click += FolderOpenButton_Click;
@@ -206,7 +210,7 @@
             TokenButton.Location = new Point(248, 92);
             TokenButton.Name = "TokenButton";
             TokenButton.Size = new Size(175, 30);
-            TokenButton.TabIndex = 3;
+            TokenButton.TabIndex = 5;
             TokenButton.Text = "Токен";
             TokenButton.UseVisualStyleBackColor = true;
             TokenButton.Click += TokenButton_Click;
@@ -216,8 +220,8 @@
             InformationButton.Location = new Point(63, 92);
             InformationButton.Name = "InformationButton";
             InformationButton.Size = new Size(175, 30);
-            InformationButton.TabIndex = 2;
-            InformationButton.Text = "Инфо";
+            InformationButton.TabIndex = 4;
+            InformationButton.Text = "Информация";
             InformationButton.UseVisualStyleBackColor = true;
             InformationButton.Click += InformationButton_Click;
             // 
@@ -229,18 +233,18 @@
             progressBar1.Step = 1;
             progressBar1.TabIndex = 19;
             // 
-            // button1
+            // CombinePdfButton
             // 
-            button1.BackColor = SystemColors.Control;
-            button1.FlatStyle = FlatStyle.System;
-            button1.Location = new Point(63, 56);
-            button1.Margin = new Padding(4, 5, 4, 5);
-            button1.Name = "button1";
-            button1.Size = new Size(360, 30);
-            button1.TabIndex = 20;
-            button1.Text = "Маркировка";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += CombinePdfButton_Click;
+            CombinePdfButton.BackColor = SystemColors.Control;
+            CombinePdfButton.FlatStyle = FlatStyle.System;
+            CombinePdfButton.Location = new Point(63, 56);
+            CombinePdfButton.Margin = new Padding(4, 5, 4, 5);
+            CombinePdfButton.Name = "CombinePdfButton";
+            CombinePdfButton.Size = new Size(360, 30);
+            CombinePdfButton.TabIndex = 3;
+            CombinePdfButton.Text = "Объединить PDF";
+            CombinePdfButton.UseVisualStyleBackColor = true;
+            CombinePdfButton.Click += CombinePdfButton_Click;
             // 
             // OzonButton
             // 
@@ -251,7 +255,7 @@
             OzonButton.Location = new Point(248, 8);
             OzonButton.Name = "OzonButton";
             OzonButton.Size = new Size(175, 40);
-            OzonButton.TabIndex = 22;
+            OzonButton.TabIndex = 2;
             OzonButton.Text = "Ozon";
             OzonButton.UseVisualStyleBackColor = false;
             OzonButton.Click += ExcelOzonButton_Click;
@@ -262,7 +266,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(484, 401);
             Controls.Add(OzonButton);
-            Controls.Add(button1);
+            Controls.Add(CombinePdfButton);
             Controls.Add(progressBar1);
             Controls.Add(InformationButton);
             Controls.Add(TokenButton);
@@ -299,7 +303,7 @@
         private Button TokenButton;
         private Button InformationButton;
         private ProgressBar progressBar1;
-        private Button button1;
+        private Button CombinePdfButton;
         private Button OzonButton;
     }
 }

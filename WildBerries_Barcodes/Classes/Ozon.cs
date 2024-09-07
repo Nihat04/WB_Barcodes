@@ -18,8 +18,7 @@ namespace WBBarcodes.Classes
             for (int i = 4; i < excelRows.Length; i++)
             {
                 var row = excelRows[i];
-                ozonProducts[i - 4] = new OzonProduct { Articul = row.ItemArray[0].ToString(), Name = row.ItemArray[2].ToString(), Barcode = row.ItemArray[3].ToString() };
-
+                ozonProducts[i - 4] = new OzonProduct { Articul = row.ItemArray[0].ToString(), Name = row.ItemArray[2].ToString(), Barcode = row.ItemArray[4].ToString() };
             }
 
             return ozonProducts;

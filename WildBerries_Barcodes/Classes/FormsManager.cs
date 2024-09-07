@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using WBBarcodes.Classes.JsonClasses;
 using WBBarcodes.Properties;
 using WildBerries_Barcodes.Scripts;
 
@@ -32,8 +34,9 @@ namespace WBBarcodes.Classes
                     clonedControl.Name = controlAsLabel.Name;
                     clonedControl.BackColor = controlAsLabel.BackColor;
                     clonedControl.TextAlign = controlAsLabel.TextAlign;
-
                     clonedControl.AutoSize = controlAsLabel.AutoSize;
+                    clonedControl.Location = controlAsLabel.Location;
+                    clonedControl.ForeColor = controlAsLabel.ForeColor;
 
                     clonedPanel.Controls.Add(clonedControl);
                 }
@@ -58,8 +61,57 @@ namespace WBBarcodes.Classes
                 }
             }
 
-            TagSize.Change(clonedPanel);
+            //TagSize.Change(clonedPanel);
             return clonedPanel;
+        }
+
+        public static void RenderPanel(Panel panel, Card card)
+        {
+            Product product = new Product(card);
+            RenderPanel(panel, product);
+        }
+
+        public static void RenderPanel(Panel panel, OzonProduct product)
+        {
+            Product prod = new Product(product);
+            RenderPanel(panel, prod);
+        }
+
+        public static void RenderPanel(Panel panel, Product product)
+        {
+            Func<string, string, string> formatFunc = (constText, replaceText) =>
+                constText.Contains(':') ? $"{constText.Split(':')[0]}: {replaceText}" : replaceText;
+
+            var controls = panel.Controls;
+            foreach (Control control in controls)
+            {
+                switch (control.Name)
+                {
+                    case "BarcodeDigits":
+                        if(product.Barcode != null) control.Text = formatFunc(control.Text, product.Barcode);
+                        break;
+
+                    case "BarcodeIMG":
+                        if (product.Barcode != null) Barcode.SetImage(product.Barcode, control as PictureBox);
+                        break;
+
+                    case "Size":
+                        if (product.Size != null) control.Text = formatFunc(control.Text, product.Size);
+                        break;
+
+                    case "Articul":
+                        if (product.Articul != null) control.Text = formatFunc(control.Text, product.Articul.ToString());
+                        break;
+
+                    case "Country":
+                        if (product.Country != null) control.Text = formatFunc(control.Text, product.Country);
+                        break;
+
+                    case "Type":
+                        if (product.Barcode != null) control.Text = formatFunc(control.Text, product.Type);
+                        break;
+                }
+            }
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Windows.Forms;
 using WBBarcodes.Api;
 
 namespace WBBarcodes.Classes.JsonClasses
 {
-    public class TagV2
+    public class WbProduct
     {
         [JsonPropertyName("cards")]
         public List<Card> Cards { get; set; }
@@ -14,7 +15,7 @@ namespace WBBarcodes.Classes.JsonClasses
 
         public bool error { get; set; }
 
-        public TagV2 getMore()
+        public WbProduct getMore()
         {
             var moreProducts = WildBerriesAPI.getAllProducts(this.Cursor.UpdatedAt, this.Cursor.NmID);
 
@@ -78,6 +79,14 @@ namespace WBBarcodes.Classes.JsonClasses
         public int TagsCount { get; set; }
         public Size? RequiredSize { get; set; }
         public int BoxId { get; set; }
+
+        public string getCountry()
+        {
+            var countryCharacteristic = this.Characteristics.Find(charact => charact.Name.Equals("Страна производства"));
+            var objAsDynamic = countryCharacteristic.Value as dynamic;
+            var countryArray = JsonSerializer.Deserialize<string[]>(objAsDynamic);
+            return countryArray[0];
+        }
     }
 
     public class Characteristic

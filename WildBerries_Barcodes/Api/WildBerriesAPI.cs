@@ -26,7 +26,7 @@ namespace WBBarcodes.Api
             }
         }
 
-        public static TagV2 getAllProducts(DateTime? upd = null, int? nmId = null)
+        public static WbProduct getAllProducts(DateTime? upd = null, int? nmId = null)
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -68,7 +68,7 @@ namespace WBBarcodes.Api
 
             var responseJson = response.Content.ReadAsStringAsync().Result;
 
-            var products = JsonSerializer.Deserialize<TagV2>(responseJson);
+            var products = JsonSerializer.Deserialize<WbProduct>(responseJson);
 
             return products;
         }

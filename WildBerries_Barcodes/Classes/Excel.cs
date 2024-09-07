@@ -80,7 +80,7 @@ namespace WBBarcodes.Classes
             return rows;
         }
 
-        public static Card getCardFromProducts(DataRow row, TagV2 productsList)
+        public static Card getCardFromProducts(DataRow row, WbProduct productsList)
         {
             var articul = row.ItemArray[0].ToString();
 

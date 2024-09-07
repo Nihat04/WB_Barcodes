@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WBBarcodes.Classes
 {
-    internal class OzonProduct
+    public class OzonProduct
     {
         public string Articul { get; set; }
         public string Name { get; set; }

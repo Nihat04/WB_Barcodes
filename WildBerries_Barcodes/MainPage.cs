@@ -1,5 +1,6 @@
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
+using PdfSharp.Pdf.Content;
 using PdfSharp.Pdf.IO;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Text.Json;
 using WBBarcodes.Api;
 using WBBarcodes.Classes;
 using WBBarcodes.Properties;
+using WildBerries_Barcodes.Scripts;
 using WildBerries_Barcodes.Scripts.JsonClasses;
 
 namespace WildBerries_Barcodes
@@ -27,7 +29,7 @@ namespace WildBerries_Barcodes
 
         private async void ImportExcelButton_Click(object sender, EventArgs e)
         {
-            var excelPath = FilesManager.ChooseFile();
+            var excelPath = FilesManager.ChooseExcelFile();
             if (excelPath == "Error") return;
 
             var excelRows = Excel.ReadFile(excelPath);
@@ -99,7 +101,7 @@ namespace WildBerries_Barcodes
         private void FormLoad(object sender, EventArgs e)
         {
             UpdateImageInfo();
-            Scripts.TagSize.Change(ImagePanel);
+            //Scripts.TagSize.Change(ImagePanel);
         }
 
         private void UpdateImageInfo()
@@ -126,7 +128,11 @@ namespace WildBerries_Barcodes
 
         private async void ExcelOzonButton_Click(object sender, EventArgs e)
         {
-            var excelPath = FilesManager.ChooseFile();
+            string[] testArr = new string[] { "219--29", "219--29" }; 
+
+            Console.WriteLine(OzonApi.getProducts(testArr));
+            return;
+            var excelPath = FilesManager.ChooseExcelFile();
             if (excelPath == "Error") return;
 
             var excelRows = Excel.ReadFile(excelPath);
@@ -141,7 +147,9 @@ namespace WildBerries_Barcodes
                     progressBar1.Increment(value);
             });
 
-            await Task.Run(() => FilesManager.GenerateOzonFiles(excelRows, progress));
+            var panel = FormsManager.ClonePanel(ImagePanel);
+
+            await Task.Run(() => FilesManager.GenerateOzonFiles(excelRows, progress, panel));
 
             File.Delete(excelPath);
         }
@@ -153,36 +161,38 @@ namespace WildBerries_Barcodes
             if (!Directory.Exists(folderName))
                 Directory.CreateDirectory(folderName);
 
-            using (OpenFileDialog dialog = new() { Filter = "PDF File (*.pdf)|*.pdf", ValidateNames = true, Multiselect = true })
+            var files = FilesManager.ChooselPdfFiles();
+
+            if (files == null) return;
+
+            var pdf = new PdfDocument();
+
+            for (int i = 0; i < files.Length; i++)
             {
-                if (!(dialog.ShowDialog() == DialogResult.OK))
-                    return;
-
-                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-                var pdf = new PdfDocument();
-
-                for(int i = 0; i < dialog.FileNames.Length; i++)
+                var file = files[i];
+                var fileName = Path.GetFileName(file).Split('.')[0];
+                var pdfDoc = PdfReader.Open(file, PdfDocumentOpenMode.Import);
+                for (int j = 0; j < pdfDoc.PageCount; j++)
                 {
-                    var file = dialog.FileNames[i];
-                    var fileName = Path.GetFileName(file).Split('.')[0];
-                    var readPdf = PdfReader.Open(file, PdfDocumentOpenMode.Import);
-                    for(int j = 0; j < readPdf.PageCount; j++)
+                    var page = pdfDoc.Pages[j];
+                    var newPage = pdf.AddPage(page);
+
+                    var tagName = fileName;
+                    var content = ContentReader.ReadContent(page);
+
+                    using (XGraphics gfx = XGraphics.FromPdfPage(newPage))
                     {
-                        var page = readPdf.Pages[j];
-                        var newPage = pdf.AddPage(page);
-
-                        using(XGraphics gfx = XGraphics.FromPdfPage(newPage))
-                        {
-                            var font = new XFont("Arial", 10);
-                            gfx.DrawString(fileName, font, XBrushes.Black, new XRect(page.Width / 2 - 5, page.Height - 10, 20, 0), XStringFormats.Center);
-                        }
+                        var font = new XFont("Arial", 8);
+                        gfx.DrawString(tagName, font, XBrushes.Black, 5, page.Height - 30, XStringFormats.Default);
                     }
-
                 }
 
-                var finalFileName = DateTime.Now.ToString("dd.MM.yyyy_HH-mm");
-                pdf.Save($"{folderName}\\{finalFileName}.pdf");
             }
+
+            var finalFileName = DateTime.Now.ToString("yyyy.MM.dd_HH-mm");
+            pdf.Save($"{folderName}\\{finalFileName}.pdf");
+
+            Process.Start("explorer.exe", folderName);
         }
     }
 }

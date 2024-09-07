@@ -9,10 +9,16 @@ using WildBerries_Barcodes.Scripts;
 
 namespace WBBarcodes.Classes
 {
+    public enum FileType
+    {
+        Pdf,
+        Excel
+    }
+
     public class FilesManager
     {
         private List<Classes.File<object>> Files {  get; set; }
-        public static void GenerateOzonFiles(DataRow[] excelRows, IProgress<int> progress)
+        public static void GenerateOzonFiles(DataRow[] excelRows, IProgress<int> progress, Panel panel)
         {
             var pdf = new PDF();
             var productsList = Ozon.GetProducts();
@@ -27,7 +33,8 @@ namespace WBBarcodes.Classes
                     var card = Ozon.GetProducts(row, productsList);
                     if (card == null) throw new OnRunException("There is no such product", $"cannot find product with articul {row.ItemArray[0].ToString()}");
                     var count = int.Parse(row.ItemArray[2].ToString());
-                    pdf.AddPage(card, count * 2);
+                    FormsManager.RenderPanel(panel, card);
+                    pdf.AddPage(panel, count);
                 }
                 catch (OnRunException exception)
                 {
@@ -63,7 +70,7 @@ namespace WBBarcodes.Classes
 
                     if (card == null) continue;
 
-                    TagSize.RenderPanel(panel, card);
+                    FormsManager.RenderPanel(panel, card);
                     pdf.AddPage(panel, card.TagsCount);
                     template.AddColumn(card.RequiredSize.Skus[0], card.TagsCount);
                     shkTemplate.AddColumn(card.RequiredSize.Skus[0], card.TagsCount, card.BoxId);
@@ -109,24 +116,51 @@ namespace WBBarcodes.Classes
         /// open excel file choose dialog
         /// </summary>
         /// <returns>created temporary file path</returns>
-        public static string ChooseFile()
+        public static string ChooseExcelFile()
+        {
+            const string fileFilter = "Excel WorkBook|*.xlsx";
+            
+            return ChooseFile(fileFilter);
+        }
+
+        public static string[] ChooselPdfFiles()
+        {
+            const string folderName = "Combined_files";
+
+            if (!Directory.Exists(folderName))
+                Directory.CreateDirectory(folderName);
+
+            using (OpenFileDialog dialog = new() { Filter = "PDF File (*.pdf)|*.pdf", ValidateNames = true, Multiselect = true })
+            {
+                if (!(dialog.ShowDialog() == DialogResult.OK))
+                    return null;
+
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+                return dialog.FileNames;
+            }
+        }
+
+        private static string ChooseFile(string filter)
         {
             if (!Directory.Exists("temp"))
                 Directory.CreateDirectory("temp");
 
-            const string temporaryExcelPath = @"temp\temporaryExcel.xlsx";
+            const string temporaryFolderPath = @"temp\";
 
-            using (OpenFileDialog dialog = new() { Filter = "Excel WorkBook|*.xlsx", ValidateNames = true })
+            using (OpenFileDialog dialog = new() { Filter = filter, ValidateNames = true })
             {
                 if (!(dialog.ShowDialog() == DialogResult.OK))
                     return "Error";
 
+                var fileFullPath = Path.Combine(temporaryFolderPath, dialog.SafeFileName);
+
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-                File.Copy(dialog.FileName, temporaryExcelPath, true);
-            }
+                File.Copy(dialog.FileName, fileFullPath, true);
 
-            return temporaryExcelPath;
+                return fileFullPath;
+            }
         }
     }
 }
