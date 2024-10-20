@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Text;
 using WBBarcodes.Api;
+using WBBarcodes.Classes.JsonClasses;
 using WBBarcodes.Exceptions;
 using WildBerries_Barcodes.Scripts;
 
@@ -18,10 +19,9 @@ namespace WBBarcodes.Classes
     public class FilesManager
     {
         private List<Classes.File<object>> Files {  get; set; }
-        public static void GenerateOzonFiles(DataRow[] excelRows, IProgress<int> progress, Panel panel)
+        public static void GenerateOzonFiles(DataRow[] excelRows, IProgress<int> progress, Panel panel, OzonProducts productsList)
         {
             var pdf = new PDF();
-            var productsList = Ozon.GetProducts();
 
             foreach (var row in excelRows)
             {
@@ -29,8 +29,9 @@ namespace WBBarcodes.Classes
                 try
                 {
                     progress.Report(1);
+                    var articul = row.ItemArray[0].ToString();
                     if (row.ItemArray[0].ToString().Equals("")) continue;
-                    var card = Ozon.GetProducts(row, productsList);
+                    var card = productsList.result.Find(product => product.offer_id.Equals(articul));
                     if (card == null) throw new OnRunException("There is no such product", $"cannot find product with articul {row.ItemArray[0].ToString()}");
                     var count = int.Parse(row.ItemArray[2].ToString());
                     FormsManager.RenderPanel(panel, card);

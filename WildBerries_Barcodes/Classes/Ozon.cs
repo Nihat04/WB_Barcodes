@@ -29,6 +29,25 @@ namespace WBBarcodes.Classes
             return Array.Find(products, (product) => product.Articul.Equals(row.ItemArray[0].ToString()));
         }
 
+        public static List<string> GetProductsArticuls(DataRow[] data)
+        {
+            List<string> articuls = new List<string>();
+
+            foreach (DataRow row in data)
+            {
+                if (row != null)
+                {
+                    var articul = row.ItemArray[0];
+                    if (articul != null)
+                    {
+                        articuls.Add(row.ItemArray[0].ToString());
+                    }
+                }
+            }
+
+            return articuls;
+        }
+
         public override void Save(string folderPath)
         {
             throw new NotImplementedException();

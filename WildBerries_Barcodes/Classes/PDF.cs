@@ -174,7 +174,8 @@ namespace WildBerries_Barcodes.Scripts
                 return;
             }
 
-            var filePath = Path.Combine(folderPath, "tags.pdf");
+            string fileName = GenerateFileName() + ".pdf";
+            var filePath = Path.Combine(folderPath, fileName);
             Item.Save(filePath);
         }
 

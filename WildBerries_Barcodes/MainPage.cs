@@ -131,14 +131,13 @@ namespace WildBerries_Barcodes
             string[] testArr = new string[] { "219--29", "219--29" }; 
 
             Console.WriteLine(OzonApi.getProducts(testArr));
-            return;
             var excelPath = FilesManager.ChooseExcelFile();
             if (excelPath == "Error") return;
 
             var excelRows = Excel.ReadFile(excelPath);
 
             progressBar1.Value = 0;
-            progressBar1.Maximum = excelRows.Length;
+            progressBar1.Maximum = excelRows.Length * 2;
             var progress = new Progress<int>(value =>
             {
                 if (value == -1)
@@ -149,7 +148,12 @@ namespace WildBerries_Barcodes
 
             var panel = FormsManager.ClonePanel(ImagePanel);
 
-            await Task.Run(() => FilesManager.GenerateOzonFiles(excelRows, progress, panel));
+            await Task.Run(() =>
+            {
+                List<string> articuls = Ozon.GetProductsArticuls(excelRows);
+                var products = OzonApi.getProducts(articuls.ToArray());
+                FilesManager.GenerateOzonFiles(excelRows, progress, panel, products);
+            });
 
             File.Delete(excelPath);
         }

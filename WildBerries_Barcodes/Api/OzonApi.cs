@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using WBBarcodes.Classes.JsonClasses;
 
 namespace WBBarcodes.Api
@@ -31,7 +26,7 @@ namespace WBBarcodes.Api
             }
         }
 
-        public static WbProduct getProducts(string[] sellerArticuls)
+        public static OzonProducts getProducts(string[] sellerArticuls)
         {
             string[] clientInfo = ClientInfo.Split('\n');
 
@@ -49,9 +44,9 @@ namespace WBBarcodes.Api
             var responseJson = response.Content.ReadAsStringAsync().Result;
             Console.WriteLine(responseJson);
 
-            //var products = JsonSerializer.Deserialize<WbProduct>(responseJson);
+            var products = JsonSerializer.Deserialize<OzonProducts>(responseJson);
 
-            return null;
+            return products;
         }
     }
 }

@@ -65,6 +65,12 @@ namespace WBBarcodes.Classes
             return clonedPanel;
         }
 
+        public static void RenderPanel(Panel panel, Result result)
+        {
+            Product product = new Product(result);
+            RenderPanel(panel, product);
+        }
+
         public static void RenderPanel(Panel panel, Card card)
         {
             Product product = new Product(card);
