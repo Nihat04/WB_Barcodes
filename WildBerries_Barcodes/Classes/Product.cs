@@ -48,7 +48,7 @@ namespace WBBarcodes.Classes
             var findResult = result.attributes.Find(attribute => attribute.attribute_id == id);
             if (findResult == null)
             {
-                throw new Exception();
+                return "";
             }
 
             return findResult.values[0].value.ToString();

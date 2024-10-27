@@ -110,7 +110,16 @@ namespace WBBarcodes.Classes
                         break;
 
                     case "Country":
-                        if (product.Country != null) control.Text = formatFunc(control.Text, product.Country);
+                        if (product.Country != null)
+                        {
+                            if(product.Country.Equals(""))
+                            {
+                                control.Text = "Срок годности не ограничен.";
+                                break;
+                            }
+
+                            control.Text = formatFunc("Срок годности не ограничен.\nСтрана производства:", product.Country);
+                        }
                         break;
 
                     case "Type":
