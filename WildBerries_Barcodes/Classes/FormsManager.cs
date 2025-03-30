@@ -102,11 +102,11 @@ namespace WBBarcodes.Classes
                         break;
 
                     case "Size":
-                        if (product.Size != null) control.Text = formatFunc(control.Text, product.Size);
+                        if (product.Size != null) control.Text = formatFunc(control.Text, product.Size + (product.SellerSize != null ? $" ({product.SellerSize})" : ""));
                         break;
 
                     case "Articul":
-                        if (product.Articul != null) control.Text = formatFunc(control.Text, product.Articul.ToString());
+                        if (product.Articul != null) control.Text = formatFunc(control.Text, product.Articul + (product.SellerArticul != null ? $" ({product.SellerArticul})" : ""));
                         break;
 
                     case "Country":
@@ -124,6 +124,12 @@ namespace WBBarcodes.Classes
 
                     case "Type":
                         if (product.Barcode != null) control.Text = formatFunc(control.Text, product.Type);
+                        break;
+                    case "Brand":
+                        if(product.Brand != null)
+                        {
+                            control.Text = product.Brand.ToString();
+                        }
                         break;
                 }
             }
