@@ -67,7 +67,7 @@ namespace WBBarcodes.Classes
                 try
                 {
                     progress.Report(1);
-                    var card = Excel.getCardFromProducts(row, productsList);
+                    var card = Excel.GetCardFromProducts(row, productsList);
 
                     if (card == null) continue;
 

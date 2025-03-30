@@ -128,9 +128,6 @@ namespace WildBerries_Barcodes
 
         private async void ExcelOzonButton_Click(object sender, EventArgs e)
         {
-            string[] testArr = new string[] { "219--29", "219--29" }; 
-
-            Console.WriteLine(OzonApi.getProducts(testArr));
             var excelPath = FilesManager.ChooseExcelFile();
             if (excelPath == "Error") return;
 

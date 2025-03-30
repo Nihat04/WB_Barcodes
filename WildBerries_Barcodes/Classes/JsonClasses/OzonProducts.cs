@@ -9,7 +9,7 @@ namespace WBBarcodes.Classes.JsonClasses
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class Attribute
     {
-        public int? attribute_id { get; set; }
+        public int? id { get; set; }
         public int? complex_id { get; set; }
         public List<Value> values { get; set; }
     }
@@ -34,7 +34,7 @@ namespace WBBarcodes.Classes.JsonClasses
         public string dimension_unit { get; set; }
         public int? weight { get; set; }
         public string weight_unit { get; set; }
-        public List<Image> images { get; set; }
+        public List<string> images { get; set; }
         public string image_group_id { get; set; }
         public List<object> images360 { get; set; }
         public List<object> pdf_list { get; set; }

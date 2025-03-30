@@ -30,7 +30,7 @@ namespace WBBarcodes.Api
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("https://suppliers-api.wildberries.ru");
+            client.BaseAddress = new Uri("https://content-api.wildberries.ru");
 
             var json = @"
                 {
@@ -69,6 +69,8 @@ namespace WBBarcodes.Api
             var responseJson = response.Content.ReadAsStringAsync().Result;
 
             var products = JsonSerializer.Deserialize<WbProduct>(responseJson);
+
+            if (products == null) throw new Exception("Products was not found");
 
             return products;
         }

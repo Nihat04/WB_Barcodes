@@ -35,14 +35,12 @@ namespace WBBarcodes.Api
             client.DefaultRequestHeaders.Add("Api-Key", clientInfo[1].Trim());
 
             var body = new { filter = new { offer_id = sellerArticuls }, limit = 1000 };
-            Console.WriteLine(JsonSerializer.Serialize(body));
 
             var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
 
-            var response = client.PostAsync("https://api-seller.ozon.ru/v3/products/info/attributes", content).Result;
+            var response = client.PostAsync("https://api-seller.ozon.ru/v4/product/info/attributes", content).Result;
 
             var responseJson = response.Content.ReadAsStringAsync().Result;
-            Console.WriteLine(responseJson);
 
             var products = JsonSerializer.Deserialize<OzonProducts>(responseJson);
 
