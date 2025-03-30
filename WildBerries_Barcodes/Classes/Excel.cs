@@ -1,11 +1,7 @@
 ﻿using ExcelDataReader;
 using Spire.Xls;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using WBBarcodes.Classes.JsonClasses;
 using WBBarcodes.Exceptions;
 
@@ -13,7 +9,7 @@ namespace WBBarcodes.Classes
 {
     internal class Excel : File<DataTable>
     {
-        private bool CartonInclude;
+        private readonly bool CartonInclude;
 
         public Excel(bool cartonInclude = false)
         {
@@ -80,36 +76,48 @@ namespace WBBarcodes.Classes
             return rows;
         }
 
-        public static Card GetCardFromProducts(DataRow row, WbProduct productsList)
+        public static ExcelRow[] GetProductRows(DataRow[] rows)
         {
-            var articul = row.ItemArray[0].ToString();
+            ExcelRow[] excelRows = new ExcelRow[rows.Length];
 
-            if (articul.StartsWith("Артикуль") || Equals(articul, ""))
-                return null;
+            for (int i = 1;i < rows.Length;i++)
+            {
+                var row = rows[i];
 
-            var size = row.ItemArray[1].ToString().ToLower();
-            var count = 0;
-            var countIsNumber = int.TryParse(row.ItemArray[2].ToString(), out count);
-            var cartBoxNumber = row.ItemArray[3].ToString();
+                if (row.ItemArray[0] == DBNull.Value && row.ItemArray[1] == DBNull.Value) continue;
+
+                excelRows[i] = new ExcelRow(row);
+            }
+
+            return excelRows;
+        }
+
+        public static ExcelRow[] GetProductRows(string path)
+        {
+            var dataRows = ReadFile(path);
+            return GetProductRows(dataRows);
+        }
+
+        public static Card GetCardFromExcelRow(ExcelRow row, WbProduct productsList)
+        {
             var productsCount = productsList.Cards.Count();
-            var card = productsList.Cards.Find(card => card.NmID.ToString().Equals(articul));
+            var card = productsList.Cards.Find(card => card.NmID == row.Articul);
 
             while (card == null)
             {
                 productsList.getMore();
-                card = productsList.Cards.Find(card => card.NmID.ToString().Equals(articul));
+                card = productsList.Cards.Find(card => card.NmID == row.Articul);
 
-                if (productsList.Cards.Count <= productsCount) throw new OnRunException("Ошибка артикуля", $"Не удалось найти товар с арттикулем \"{articul}\"");
+                if (productsList.Cards.Count <= productsCount) throw new OnRunException("Ошибка артикуля", $"Не удалось найти товар с арттикулем \"{row.Articul}\"");
                 productsCount = productsList.Cards.Count;
             }
 
-            card.RequiredSize = card.Sizes.Find(cardSize => cardSize.TechSize.ToLower().Equals(size));
-            card.TagsCount = count;
+            card.RequiredSize = card.Sizes.Find(cardSize => cardSize.TechSize.ToLower().Equals(row.Size));
+            card.TagsCount = row.Count;
 
-            if (card.RequiredSize == null) throw new OnRunException("Ошибка размера", $"Не удалось найти размер {size} у товара с артикулем \"{articul}\"");
-            if (!countIsNumber) throw new OnRunException("Ошибка количества", $"Неверно указано количество товара");
+            if (card.RequiredSize == null) throw new OnRunException("Ошибка размера", $"Не удалось найти размер {row.Size} у товара с артикулем \"{row.Articul}\"");
 
-            if (!cartBoxNumber.Equals("") && int.TryParse(cartBoxNumber, out _)) card.BoxId = int.Parse(row.ItemArray[3].ToString());
+            if (!(row.BoxId == null || row.BoxId.Equals("")) && int.TryParse(row.BoxId, out _)) card.BoxId = int.Parse(row.BoxId);
 
             return card;
         }

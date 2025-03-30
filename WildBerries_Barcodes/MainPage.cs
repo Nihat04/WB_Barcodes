@@ -32,7 +32,7 @@ namespace WildBerries_Barcodes
             var excelPath = FilesManager.ChooseExcelFile();
             if (excelPath == "Error") return;
 
-            var excelRows = Excel.ReadFile(excelPath);
+            var excelRows = Excel.GetProductRows(excelPath);
 
             progressBar1.Value = 0;
             progressBar1.Maximum = excelRows.Length;
@@ -44,9 +44,11 @@ namespace WildBerries_Barcodes
                     progressBar1.Increment(value);
             });
 
+            var iProgress = progress as IProgress<int>;
+
             var panel = FormsManager.ClonePanel(ImagePanel);
 
-            await Task.Run(() => FilesManager.GenerateWbFiles(excelRows, progress, panel));
+            await Task.Run(() => FilesManager.CreateWbFiles(excelRows, panel, () => iProgress.Report(1)));
 
             File.Delete(excelPath);
         }
@@ -116,8 +118,8 @@ namespace WildBerries_Barcodes
             using (var jsonFile = File.OpenRead("info.json"))
             {
                 var info = JsonSerializer.Deserialize<Info>(jsonFile);
-                About.Text = info.About;
-                Brand.Text = info.Brand;
+                About.Text = info?.About;
+                Brand.Text = info?.Brand;
             }
         }
 

@@ -29,10 +29,10 @@ namespace WBBarcodes.Classes
                     var controlAsLabel = control as Label;
                     var clonedControl = new Label();
 
-                    clonedControl.Text = controlAsLabel.Text;
-                    clonedControl.Font = controlAsLabel.Font;
-                    clonedControl.Name = controlAsLabel.Name;
-                    clonedControl.BackColor = controlAsLabel.BackColor;
+                    clonedControl.Text = controlAsLabel?.Text;
+                    clonedControl.Font = controlAsLabel?.Font;
+                    clonedControl.Name = controlAsLabel?.Name;
+                    clonedControl.BackColor = controlAsLabel!.BackColor;
                     clonedControl.TextAlign = controlAsLabel.TextAlign;
                     clonedControl.AutoSize = controlAsLabel.AutoSize;
                     clonedControl.Location = controlAsLabel.Location;
@@ -45,7 +45,7 @@ namespace WBBarcodes.Classes
                     var controlAsPictureBox = control as PictureBox;
                     var clonedControl = new PictureBox();
 
-                    clonedControl.Size = controlAsPictureBox.Size;
+                    clonedControl.Size = controlAsPictureBox!.Size;
                     clonedControl.MaximumSize = controlAsPictureBox.MaximumSize;
                     clonedControl.Name = controlAsPictureBox.Name;
                     clonedControl.BackColor = controlAsPictureBox.BackColor;
@@ -98,7 +98,12 @@ namespace WBBarcodes.Classes
                         break;
 
                     case "BarcodeIMG":
-                        if (product.Barcode != null) Barcode.SetImage(product.Barcode, control as PictureBox);
+                        if (product.Barcode != null)
+                        {
+                            PictureBox? barcodeBox = control as PictureBox;
+                            Barcode.SetImage(product.Barcode, barcodeBox: barcodeBox!);
+                        }
+
                         break;
 
                     case "Size":

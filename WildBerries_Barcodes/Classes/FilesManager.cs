@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Text;
+using System.Windows.Forms;
 using WBBarcodes.Api;
 using WBBarcodes.Classes.JsonClasses;
 using WBBarcodes.Exceptions;
@@ -55,36 +56,37 @@ namespace WBBarcodes.Classes
             pdf.Save("OzonTags");
         }
 
-        public static void GenerateWbFiles(DataRow[] excelRows, IProgress<int> progress, Panel panel)
+        public static void CreateWbFiles(ExcelRow[] rows, Panel panel, Action? iterationFunc = null)
         {
             var pdf = new PDF();
             var template = new Excel();
             var shkTemplate = new Excel(true);
             var productsList = WildBerriesAPI.getAllProducts();
 
-            foreach (var row in excelRows)
+            foreach (var row in rows)
             {
                 try
                 {
-                    progress.Report(1);
-                    var card = Excel.GetCardFromProducts(row, productsList);
+                    if (iterationFunc != null) iterationFunc();
+
+                    if (row == null) continue;
+
+                    var card = Excel.GetCardFromExcelRow(row, productsList);
 
                     if (card == null) continue;
 
                     FormsManager.RenderPanel(panel, card);
                     pdf.AddPage(panel, card.TagsCount);
-                    template.AddColumn(card.RequiredSize.Skus[0], card.TagsCount);
+                    template.AddColumn(card.RequiredSize!.Skus[0], card.TagsCount);
                     shkTemplate.AddColumn(card.RequiredSize.Skus[0], card.TagsCount, card.BoxId);
                 }
                 catch (OnRunException exception)
                 {
-                    progress.Report(-1);
                     MessageBox.Show(exception.Message, exception.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 catch (TimeoutException)
                 {
-                    progress.Report(-1);
                     MessageBox.Show("Время запроса вышло", "Ошибка запроса сервера", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
