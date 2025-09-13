@@ -112,7 +112,7 @@ namespace WBBarcodes.Classes
                 productsCount = productsList.Cards.Count;
             }
 
-            card.RequiredSize = card.Sizes.Find(cardSize => cardSize.TechSize.ToLower().Equals(row.Size));
+            card.RequiredSize = card.Sizes.Find(cardSize => cardSize.TechSize.ToLower().Equals(row.Size!.ToLower()));
             card.TagsCount = row.Count;
 
             if (card.RequiredSize == null) throw new OnRunException("Ошибка размера", $"Не удалось найти размер {row.Size} у товара с артикулем \"{row.Articul}\"");

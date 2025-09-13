@@ -26,7 +26,7 @@ namespace WBBarcodes.Classes
 
             foreach (var row in excelRows)
             {
-                if (row.ItemArray[0].ToString().Equals("Артикуль WB")) continue;
+                if (row.ItemArray[0].ToString().Equals("Артикул MP")) continue;
                 try
                 {
                     progress.Report(1);
